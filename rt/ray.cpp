@@ -7,10 +7,13 @@ namespace rt {
 Ray::Ray(const Point& o, const Vector& d)
 {
     assert(d != Vector::rep(0.0f));
+    this->o = o;
+    this->d = d;
 }
 
 Point Ray::getPoint(float distance) const {
-    /* TODO */ NOT_IMPLEMENTED;
+  Point rayPoint = o + (distance * d);
+  return rayPoint;
 }
 
 }
