@@ -23,7 +23,12 @@ Vector Point::operator - (const Point& b) const {
 }
 
 bool Point::operator == (const Point& b) const {
-  if(x == b.x && y == b.y && z == b.z)
+  // set bools for each float comparison with epsilon
+  bool bool_x = (fabs(x - b.x) <= ((fabs(x) < fabs(b.x) ? fabs(b.x) : fabs(x)) * std::numeric_limits<float>::epsilon()));
+  bool bool_y = (fabs(y - b.y) <= ((fabs(y) < fabs(b.y) ? fabs(b.y) : fabs(y)) * std::numeric_limits<float>::epsilon()));
+  bool bool_z = (fabs(z - b.z) <= ((fabs(z) < fabs(b.z) ? fabs(b.z) : fabs(z)) * std::numeric_limits<float>::epsilon()));
+
+  if(bool_x && bool_y && bool_z)
     return true;
   else
     return false;

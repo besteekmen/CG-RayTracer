@@ -22,7 +22,12 @@ RGBColor RGBColor::operator * (const RGBColor& c) const {
 }
 
 bool RGBColor::operator == (const RGBColor& c) const {
-  if(r == c.r && g == c.g && b == c.b)
+  // set bools for each float comparison with epsilon
+  bool bool_r = (fabs(r - c.r) <= ((fabs(r) < fabs(c.r) ? fabs(c.r) : fabs(r)) * std::numeric_limits<float>::epsilon()));
+  bool bool_g = (fabs(g - c.g) <= ((fabs(g) < fabs(c.g) ? fabs(c.g) : fabs(g)) * std::numeric_limits<float>::epsilon()));
+  bool bool_b = (fabs(b - c.b) <= ((fabs(b) < fabs(c.b) ? fabs(c.b) : fabs(b)) * std::numeric_limits<float>::epsilon()));
+
+  if(bool_r && bool_g && bool_b)
     return true;
   else
     return false;
