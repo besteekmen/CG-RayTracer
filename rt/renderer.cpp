@@ -2,7 +2,6 @@
 #include <core/image.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
-#include <rt/cameras/camera.h>
 #include <iostream>
 #include <rt/integrators/integrator.h>
 
