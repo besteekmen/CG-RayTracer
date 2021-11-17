@@ -2,8 +2,8 @@
 #include <core/image.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
-#include <rt/cameras/camera.h>
 #include <iostream>
+#include <rt/integrators/integrator.h>
 
 namespace rt {
 
@@ -12,7 +12,17 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 {}
 
 void Renderer::render(Image& img) {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    uint width, height;
+    width = img.width();
+    height = img.height();
+    for (uint i = 0; i < width; i++) {
+        for (uint j = 0; j < height; j++) {
+            float pix_x = (2 * (i + 0.5) / width) - 1;
+            float pix_y = (2 * (j + 0.5) / height) - 1;
+            img(i,j) = this->integrator->getRadiance(cam->getPrimaryRay(pix_x, -pix_y));
+        }
+    }
 }
 
 }
@@ -22,18 +32,15 @@ rt::RGBColor a1computeColor(rt::uint x, rt::uint y, rt::uint width, rt::uint hei
 namespace rt {
 
 void Renderer::test_render1(Image& img) {
-  int resx = img.width();
-  int resy = img.height();
-  int prcx, prcy;
-
-  // For given image resolution {resx, resy}
-  // Loop over pixel raster coordinates [0, res-1]
-  // Assign the a1computeColor
-  for(prcx = 0; prcx < resx; prcx++) {
-    for(prcy = 0; prcy < resy; prcy++) {
-      img(prcx, prcy) = a1computeColor(prcx, prcy, resx, resy);
+    /* TODO NOT_IMPLEMENTED;*/
+    uint width, height;
+    width = img.width();
+    height = img.height();
+    for (uint i = 0; i < width; i++) {
+        for (uint j = 0; j < height; j++) {
+            img(i, j) = a1computeColor(i, j, width, height);
+        }
     }
-  }
 }
 }
 
@@ -42,26 +49,17 @@ rt::RGBColor a2computeColor(const rt::Ray& r);
 namespace rt {
 
 void Renderer::test_render2(Image& img) {
-  int resx = img.width();
-  int resy = img.height();
-  int prcx, prcy;
-  float ndcx, ndcy, sscx, sscy;
-  Ray ray;
-
-  // For given image resolution {resx, resy}
-  // Loop over pixel raster coordinates [0, res-1]
-  for(prcx = 0; prcx < resx; prcx++){
-    for(prcy = 0; prcy < resy; prcy++){
-        // Normalized device coordinates [0, 1]
-        ndcx = (prcx + 0.5f) / resx;
-        ndcy = (prcy + 0.5f) / resy;
-        // Screen space coordinates [-1, 1]
-        sscx = ndcx * 2.0f - 1;
-        sscy = ndcy * 2.0f - 1;
-        ray = this->cam->getPrimaryRay(sscx, -sscy);
-        img(prcx, prcy) = a2computeColor(ray);
-      }
-  }
+    /* TODO NOT_IMPLEMENTED;*/
+    uint width, height;
+    width = img.width();
+    height = img.height();
+    for (uint i = 0; i < width; i++) {
+        for (uint j = 0; j < height; j++) {
+            float pix_x = (2 * (i + 0.5) / width) - 1;
+            float pix_y = (2 * (j + 0.5) / height) - 1;
+            img(i, j) = a2computeColor(cam->getPrimaryRay(pix_x, -pix_y));
+        }
+    }
 }
 
 }
