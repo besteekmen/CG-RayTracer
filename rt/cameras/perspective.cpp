@@ -1,4 +1,5 @@
 #include <rt/cameras/perspective.h>
+#include <math.h>
 
 namespace rt {
 
