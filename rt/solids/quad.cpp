@@ -15,7 +15,34 @@ BBox Quad::getBounds() const {
 }
 
 Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */ 
+    Vector normal = cross(span1, span2).normalize();
+    float denominator = dot(normal, ray.d);
+    if (abs(denominator) <= std::numeric_limits<float>::epsilon()) {
+        return(Intersection::failure());
+    }
+    float distance = dot(normal, this->vertex - ray.o) / denominator;
+    if (distance > 0) {
+        Point point_on_plane = ray.getPoint(distance);
+        float lam1, lam2;
+        denominator = dot(this->span1, this->span2);
+            if (abs(denominator) > std::numeric_limits<float>::epsilon()) {
+                lam1 = dot((point_on_plane - this->vertex), this->span2) / denominator;
+                lam2 = dot((point_on_plane - this->vertex), this->span1) / denominator;
+                if (0 < lam1 && 0 < lam2 && lam1 < 1 && lam2 < 1) {
+                    return(Intersection(distance, ray, this, normal, Point(1, lam1, lam2)));
+                }
+            }
+            else {
+                lam1 = dot((point_on_plane - this->vertex), this->span1) / (dot(span1, span1));
+                lam2 = dot((point_on_plane - this->vertex), this->span2) / (dot(span2, span2));
+                if (0 < lam1 && 0 < lam2 && lam1 < 1 && lam2 < 1) {
+                    return(Intersection(distance, ray, this, normal, Point(1, lam1, lam2)));
+                }
+            }
+    }
+    return(Intersection::failure());
+
 }
 
 Solid::Sample Quad::sample() const {
