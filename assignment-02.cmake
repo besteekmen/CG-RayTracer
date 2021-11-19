@@ -10,6 +10,8 @@ set(MY_ADDITIONAL_SOURCES
     rt/solids/disc.cpp
     rt/solids/infiniteplane.cpp
     rt/solids/quad.cpp
+    rt/solids/quadric.cpp
+    rt/solids/quadric.h
     rt/solids/sphere.cpp
     rt/solids/triangle.cpp
     rt/intersection.cpp
