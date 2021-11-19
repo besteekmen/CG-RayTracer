@@ -23,7 +23,7 @@ float AABox::getArea() const {
     return 2 * (x*y + y*z + z*x) ;
 }
 
-bool is_t_valid(float t, float previousBestDistance){
+bool is_t_valid_aa(float t, float previousBestDistance){
     return (t < previousBestDistance && t >= std::numeric_limits<float>::epsilon());
 }
 
@@ -49,8 +49,8 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
     if (t0 >= t1)
         return Intersection::failure();
 
-    bool is_t0_valid = is_t_valid(t0, previousBestDistance);
-    bool is_t1_valid = is_t_valid(t1, previousBestDistance);
+    bool is_t0_valid = is_t_valid_aa(t0, previousBestDistance);
+    bool is_t1_valid = is_t_valid_aa(t1, previousBestDistance);
 
     if (!is_t0_valid && !is_t1_valid)
         return Intersection::failure();
