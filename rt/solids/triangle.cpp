@@ -43,7 +43,10 @@ Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) con
         /*if (dot(normal, ray.d) > 0) {
             normal = -normal;
         }*/
-        return(Intersection(distance, ray, this, normal, Point(lamdas[0], lamdas[1], lamdas[2])));
+        if (distance < previousBestDistance) {
+            return(Intersection(distance, ray, this, normal, Point(lamdas[0], lamdas[1], lamdas[2])));
+        }
+        
     }
     return(Intersection::failure());
 

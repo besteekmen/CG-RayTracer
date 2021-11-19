@@ -28,7 +28,10 @@ Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const
         }
         else {
             float distance = center_projection_distance - (sqrt(pow(this->radius, 2) - (center_projection_point - this->center).lensqr())/ray.d.length());
-            return(Intersection(distance, ray, this, (ray.getPoint(distance) - this->center).normalize(), ray.getPoint(distance)));
+            if (distance < previousBestDistance) {
+                return(Intersection(distance, ray, this, (ray.getPoint(distance) - this->center).normalize(), ray.getPoint(distance)));
+            }
+            
         }
     }
     return(Intersection::failure());
