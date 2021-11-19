@@ -9,11 +9,14 @@ BBox SimpleGroup::getBounds() const {
 Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance) const {
   Intersection Nearest_Intersection;
   bool found = false;
-  for(std::vector<Primitive *>::size_type i = 0; i != this->Primitives.size(); i++) {
-      Intersection Intsec = Primitives[i]->intersect(ray, previousBestDistance);
-      if (Intsec){
-          previousBestDistance = Intsec.distance;
-          Nearest_Intersection = Intsec;
+  //for (int i = 0; i < this->Primitives.size(); i++)
+  for(std::vector<Primitive *>::size_type i = 0; i != this->primitives.size(); i++) {
+      Intersection intersection = primitives[i]->intersect(ray, previousBestDistance);
+      float distance = intersection.distance;
+
+      if (intersection && (distance < previousBestDistance) && (distance>std::numeric_limits<float>::epsilon())){
+          previousBestDistance = distance;
+          Nearest_Intersection = intersection;
           found = true;
       }
   }
@@ -28,7 +31,7 @@ void SimpleGroup::rebuildIndex() {
 }
 
 void SimpleGroup::add(Primitive* p) {
-  this->Primitives.push_back(p);
+  this->primitives.push_back(p);
 }
 
 void SimpleGroup::setMaterial(Material* m) {
