@@ -75,7 +75,7 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
             continue;
         }
         float dist = dot(corners[this->normal_associated_point_index[i]] - ray.o, this->normals[i])/denominator;
-        if (dist>0 && dist < distance) {
+        if (dist>0 && dist < distance && dist<previousBestDistance) {
             Point pt_of_intersection = ray.getPoint(dist);
             bool flag = true;
             if (this->normals[i].x ==0) {

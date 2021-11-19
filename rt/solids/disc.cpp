@@ -21,7 +21,7 @@ Intersection Disc::intersect(const Ray& ray, float previousBestDistance) const {
         return(Intersection::failure());
     }
     float distance = dot(this->normal, this->center - ray.o) / denominator;
-    if (distance > 0) {
+    if (distance > 0 && distance<previousBestDistance) {
         float distance_center_to_point = (ray.getPoint(distance) - this->center).length();
         if (distance_center_to_point > this->radius) {
             return(Intersection::failure());

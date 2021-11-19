@@ -21,7 +21,7 @@ Intersection InfinitePlane::intersect(const Ray& ray, float previousBestDistance
         return(Intersection::failure());
     }
     float distance = dot(this->normal, this->origin - ray.o)/denominator;
-    if (distance > 0) {
+    if (distance > 0 && distance<previousBestDistance) {
         return(Intersection(distance, ray, this, this->normal, ray.getPoint(distance)));
     }
     return(Intersection::failure());
