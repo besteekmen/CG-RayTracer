@@ -1,15 +1,15 @@
 #include <rt/integrators/castingdist.h>
 #include <rt/world.h>
-
+#include <math.h>
 namespace rt {
 
 RayCastingDistIntegrator::RayCastingDistIntegrator(World* world, const RGBColor& nearColor, float nearDist, const RGBColor& farColor, float farDist)
     : Integrator(world)
 {
-  this->nearColor = nearColor;
-  this->nearDist = nearDist;
-  this->farColor = farColor;
-  this->farDist = farDist;
+    this->nearColor = nearColor;
+    this->nearDist = nearDist;
+    this->farColor = farColor;
+    this->farDist = farDist;
 }
 
 RGBColor RayCastingDistIntegrator::getRadiance(const Ray& ray) const {
@@ -29,6 +29,7 @@ RGBColor RayCastingDistIntegrator::getRadiance(const Ray& ray) const {
 
     return color * grayValue;
   }
+  return RGBColor(0,0,0);
 }
 
 }

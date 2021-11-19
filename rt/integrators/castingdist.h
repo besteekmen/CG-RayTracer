@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_INTEGRATORS_CASTINGDIST_HEADER
 
 #include <rt/integrators/integrator.h>
+#include <math.h>
 
 namespace rt {
 
