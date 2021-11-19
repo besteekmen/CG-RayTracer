@@ -8,6 +8,7 @@
 #include <rt/solids/infiniteplane.h>
 #include <rt/solids/triangle.h>
 #include <rt/solids/quad.h>
+#include <rt/solids/quadric.h>
 #include <rt/solids/disc.h>
 #include <rt/solids/aabox.h>
 #include <rt/cameras/perspective.h>
@@ -25,11 +26,14 @@ void a_solids() {
     scene->add(new Sphere(Point(1,    -1,     1), 2.2f, nullptr, nullptr));
     scene->add(new Sphere(Point(3.f,   0.8f, -2), 2, nullptr, nullptr));
 
+    // To try quadric, use the commented line below
+    //scene->add(new Quadric(7.f,2.f,3.f,0,0,0,10.f,2.f,-1.f,12.f, nullptr, nullptr));
+
     scene->add(new InfinitePlane(Point(0,- 1, 0), Vector(0, 1, 0), nullptr, nullptr));
 
     scene->add(new Triangle(Point(-2, 3.7f, 0), Point(1, 2,  1), Point( 3, 2.8f, -2), nullptr, nullptr));
     scene->add(new Triangle(Point(3,  2,    3), Point(3, 2, -3), Point(-3, 2   , -3), nullptr, nullptr));
-	scene->add(new Quad(Point(1,  -0.9f,    4.5f), Vector(-2, 0, 0), Vector(0, 0.1f, -2), nullptr, nullptr));
+    scene->add(new Quad(Point(1,  -0.9f,    4.5f), Vector(-2, 0, 0), Vector(0, 0.1f, -2), nullptr, nullptr));
 
     scene->add(new Disc(Point(-3, -0.75f, 1.5f), Vector(0, 0.5f, 0.5f), 1.5f, nullptr, nullptr));
 
@@ -39,7 +43,7 @@ void a_solids() {
     world.scene = scene;
 
     PerspectiveCamera cam(Point(0, 0, 10), Vector(0, 0, -1), Vector(0, 1, 0), pi/4, pi/3);
-    
+
 
     RayCastingIntegrator integrator(&world);
     Renderer engine(&cam, &integrator);
