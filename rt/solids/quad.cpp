@@ -22,7 +22,7 @@ Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
         return(Intersection::failure());
     }
     float distance = dot(normal, this->vertex - ray.o) / denominator;
-    if (distance > 0) {
+    if (distance > 0 && distance<previousBestDistance) {
         Point point_on_plane = ray.getPoint(distance);
         float lam1, lam2;
         denominator = dot(this->span1, this->span2);
