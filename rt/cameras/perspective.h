@@ -24,6 +24,12 @@ private:
   Vector up;
   float verticalOpeningAngle;
   float horizontalOpeningAngle;
+  float scaleX;
+  float scaleY;
+
+  Vector CamXAxis;
+  Vector CamYAxis;
+  Vector CamZAxis;
 };
 
 }

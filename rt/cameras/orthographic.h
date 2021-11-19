@@ -24,6 +24,10 @@ private:
     Vector up;
     float scaleX;
     float scaleY;
+
+    Vector CamXAxis;
+  	Vector CamYAxis;
+  	Vector CamZAxis;
 };
 
 }
