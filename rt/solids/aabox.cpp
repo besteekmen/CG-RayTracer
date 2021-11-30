@@ -62,28 +62,28 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
 
     // Prepare our normal vector
     Vector normal;
-    if (t == t0) {
-        if (t == t0x){
+    if (t-t0 >= std::numeric_limits<float>::epsilon()) {
+        if (t - t0x >= std::numeric_limits<float>::epsilon()){
             normal = Vector(1.f, 0, 0);
         }
-        if (t == t0y) {
+        if (t - t0y >= std::numeric_limits<float>::epsilon()) {
             normal = Vector(0, 1.f, 0);
         }
-        if (t == t0z) {
+        if (t - t0z >= std::numeric_limits<float>::epsilon()) {
             normal = Vector(0, 0, 1.f);
         }
         return Intersection(t, ray, this, normal, ray.getPoint(t));
     }
 
 
-    if (t == t1) {
-        if (t == t1x) {
+    if (t - t1 >= std::numeric_limits<float>::epsilon()) {
+        if (t - t1x >= std::numeric_limits<float>::epsilon()) {
             normal = Vector(1.f, 0, 0);
         }
-        if (t == t1y) {
+        if (t - t1y >= std::numeric_limits<float>::epsilon()) {
             normal = Vector(0, 1.f, 0);
         }
-        if (t == t1z) {
+        if (t - t1z >= std::numeric_limits<float>::epsilon()) {
             normal = Vector(0, 0, 1.f);
         }
         return Intersection(t, ray, this, normal, ray.getPoint(t));
