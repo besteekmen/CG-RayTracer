@@ -25,21 +25,6 @@ float AABox::getArea() const {
 
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {
 
-  /*float rayDirX = 1 / ray.d.x;
-  float rayDirY = 1 / ray.d.y;
-  float rayDirZ = 1 / ray.d.z;
-  assert(rayDirX && rayDirY && rayDirZ);
-
-  float t0x = (minCorner.x - ray.o.x) * rayDirX;
-  float t1x = (maxCorner.x - ray.o.x) * rayDirX;
-
-  float t0y = (minCorner.y - ray.o.y) * rayDirY;
-  float t1y = (maxCorner.y - ray.o.y) * rayDirY;
-
-  float t0z = (minCorner.z - ray.o.z) * rayDirZ;
-  float t1z = (maxCorner.z - ray.o.z) * rayDirZ;*/
-
-  // ray.o.x + t0x * ray.d.x = corner1.x
   Vector near = (minCorner - ray.o) / ray.d;
   Vector far = (maxCorner - ray.o) / ray.d;
 
