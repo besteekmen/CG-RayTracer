@@ -4,8 +4,8 @@ namespace rt {
 
 AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper, Material* material)
 {
-    this->corner1 = corner1;
-    this->corner2 = corner2;
+    this->minCorner = min(corner1, corner2);
+		this->maxCorner = max(corner1, corner2);
 }
 
 BBox AABox::getBounds() const {
@@ -17,10 +17,10 @@ Solid::Sample AABox::sample() const {
 }
 
 float AABox::getArea() const {
-    float x = std::abs(corner1.x - corner2.x);
-    float y = std::abs(corner1.y - corner2.y);
-    float z = std::abs(corner1.z - corner2.z);
-    return 2 * (x*y + y*z + z*x) ;
+  float x = std::abs(maxCorner.x - minCorner.x);
+  float y = std::abs(maxCorner.y - minCorner.y);
+  float z = std::abs(maxCorner.z - minCorner.z);
+  return 2 * (x*y + y*z + z*x) ;
 }
 
 bool is_t_valid_aa(float t, float previousBestDistance){
@@ -30,14 +30,14 @@ bool is_t_valid_aa(float t, float previousBestDistance){
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {
     // We compute t_near (t0) and t_far (t1) for intersection with the aabox
     // ray.o.x + t0x * ray.d.x = corner1.x
-    float t0x = (corner1.x - ray.o.x) / ray.d.x;
-    float t1x = (corner2.x - ray.o.x) / ray.d.x;
+    float t0x = (minCorner.x - ray.o.x) / ray.d.x;
+    float t1x = (maxCorner.x - ray.o.x) / ray.d.x;
 
-    float t0y = (corner1.y - ray.o.y) / ray.d.y;
-    float t1y = (corner2.y - ray.o.y) / ray.d.y;
+    float t0y = (minCorner.y - ray.o.y) / ray.d.y;
+    float t1y = (maxCorner.y - ray.o.y) / ray.d.y;
 
-    float t0z = (corner1.z - ray.o.z) / ray.d.z;
-    float t1z = (corner2.z - ray.o.z) / ray.d.z;
+    float t0z = (minCorner.z - ray.o.z) / ray.d.z;
+    float t1z = (maxCorner.z - ray.o.z) / ray.d.z;
 
     if (t0x > t1x) std::swap(t0x, t1x);
     if (t0y > t1y) std::swap(t0y, t1y);
@@ -64,10 +64,10 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
     Vector normal;
     if (t == t0) {
         if (t == t0x){
-            normal = Vector(-1.f, 0, 0);
+            normal = Vector(1.f, 0, 0);
         }
         if (t == t0y) {
-            normal = Vector(0, -1.f, 0);
+            normal = Vector(0, 1.f, 0);
         }
         if (t == t0z) {
             normal = Vector(0, 0, 1.f);
@@ -84,7 +84,7 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
             normal = Vector(0, 1.f, 0);
         }
         if (t == t1z) {
-            normal = Vector(0, 0, -1.f);
+            normal = Vector(0, 0, 1.f);
         }
         return Intersection(t, ray, this, normal, ray.getPoint(t));
     }
