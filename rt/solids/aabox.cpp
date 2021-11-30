@@ -28,67 +28,41 @@ bool is_t_valid_aa(float t, float previousBestDistance){
 }
 
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {
-    // We compute t_near (t0) and t_far (t1) for intersection with the aabox
-    // ray.o.x + t0x * ray.d.x = corner1.x
-    float t0x = (minCorner.x - ray.o.x) / ray.d.x;
-    float t1x = (maxCorner.x - ray.o.x) / ray.d.x;
+  float ray_dir_x = 1 / ray.d.x;
+  float ray_dir_y = 1 / ray.d.y;
+  float ray_dir_z = 1 / ray.d.z;
 
-    float t0y = (minCorner.y - ray.o.y) / ray.d.y;
-    float t1y = (maxCorner.y - ray.o.y) / ray.d.y;
+  // For X
+  float tx_1 = (minCorner.x - ray.o.x) * ray_dir_x;
+  float tx_2 = (maxCorner.x - ray.o.x) * ray_dir_x;
 
-    float t0z = (minCorner.z - ray.o.z) / ray.d.z;
-    float t1z = (maxCorner.z - ray.o.z) / ray.d.z;
+  // For Y
+  float ty_3 = (minCorner.y - ray.o.y) * ray_dir_y;
+  float ty_4 = (maxCorner.y - ray.o.y) * ray_dir_y;
 
-    if (t0x > t1x) std::swap(t0x, t1x);
-    if (t0y > t1y) std::swap(t0y, t1y);
-    if (t0z > t1z) std::swap(t0z, t1z);
+  // For Z
+  float tz_5 = (minCorner.z - ray.o.z) * ray_dir_z;
+  float tz_6 = (maxCorner.z - ray.o.z) * ray_dir_z;
 
-    // Now we get our intersection points.
-    float t0 = max(max(t0x, t0y), t0z);
-    float t1 = min(min(t1x, t1y), t1z);
-    if (t0 >= t1)
-        return Intersection::failure();
+  float t_min = std::max(
+    std::max(std::min(tx_1, tx_2), std::min(ty_3, ty_4)),
+    std::min(tz_5, tz_6));
+  float t_max = std::min(
+    std::min(std::max(tx_1, tx_2), std::max(ty_3, ty_4)),
+    std::max(tz_5, tz_6));
 
-    bool is_t0_valid = is_t_valid_aa(t0, previousBestDistance);
-    bool is_t1_valid = is_t_valid_aa(t1, previousBestDistance);
+  if (t_max < 0 || t_min > t_max || t_max > FLT_MAX) { return Intersection::failure(); };
+  if (t_min > previousBestDistance || t_min < 0) { return Intersection::failure(); };
 
-    if (!is_t0_valid && !is_t1_valid)
-        return Intersection::failure();
+  Vector n;
+  n = t_min == tx_1 ? Vector(-1, 0, 0) : n;
+  n = t_min == tx_2 ? Vector(1, 0, 0) : n;
+  n = t_min == ty_3 ? Vector(0, -1, 0) : n;
+  n = t_min == ty_4 ? Vector(0, 1, 0) : n;
+  n = t_min == tz_5 ? Vector(0, 0, -1) : n;
+  n = t_min == tz_6 ? Vector(0, 0, 1) : n;
 
-    float t;
-    if (is_t0_valid && is_t1_valid) t = min(t0, t1);
-    if (!is_t0_valid && is_t1_valid) t = t1;
-    if (is_t0_valid && !is_t1_valid) t = t0;
-
-    // Prepare our normal vector
-    Vector normal;
-    if (t-t0 >= std::numeric_limits<float>::epsilon()) {
-        if (t - t0x >= std::numeric_limits<float>::epsilon()){
-            normal = Vector(1.f, 0, 0);
-        }
-        if (t - t0y >= std::numeric_limits<float>::epsilon()) {
-            normal = Vector(0, 1.f, 0);
-        }
-        if (t - t0z >= std::numeric_limits<float>::epsilon()) {
-            normal = Vector(0, 0, 1.f);
-        }
-        return Intersection(t, ray, this, normal, ray.getPoint(t));
-    }
-
-
-    if (t - t1 >= std::numeric_limits<float>::epsilon()) {
-        if (t - t1x >= std::numeric_limits<float>::epsilon()) {
-            normal = Vector(1.f, 0, 0);
-        }
-        if (t - t1y >= std::numeric_limits<float>::epsilon()) {
-            normal = Vector(0, 1.f, 0);
-        }
-        if (t - t1z >= std::numeric_limits<float>::epsilon()) {
-            normal = Vector(0, 0, 1.f);
-        }
-        return Intersection(t, ray, this, normal, ray.getPoint(t));
-    }
-    return Intersection::failure();
+  return Intersection(t_min, ray, this, n, ray.getPoint(t_min));
 }
 
 }
