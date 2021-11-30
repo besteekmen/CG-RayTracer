@@ -27,7 +27,7 @@ RGBColor RayCastingDistIntegrator::getRadiance(const Ray& ray) const {
     float value = dot(-ray.d.normalize(), intersection.normal().normalize());
     RGBColor grayValue = RGBColor::rep(value);
 
-    return color * grayValue;
+    return color * grayValue.clamp();
   }
   return RGBColor(0,0,0);
 }
