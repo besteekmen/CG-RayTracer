@@ -51,6 +51,14 @@ Vector operator / (const Vector& a, float scalar) {
   return scalar * a;
 }
 
+Vector operator / (const Vector& a, const Vector& b) {
+  float x_comp = 1.0 / b.x;
+  float y_comp = 1.0 / b.y;
+  float z_comp = 1.0 / b.z;
+  assert(x_comp && y_comp && z_comp);
+  return Vector((a.x * x_comp), (a.y * y_comp), (a.z * z_comp));
+}
+
 Vector cross(const Vector& a, const Vector& b) {
   return Vector((a.y * b.z - a.z * b.y), (a.z * b.x - a.x * b.z), (a.x * b.y - a.y * b.x));
 }
