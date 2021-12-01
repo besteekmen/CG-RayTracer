@@ -14,13 +14,13 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
   this->v1 = v1;
   this->v2 = v2;
   this->v3 = v3;
-  Vector v21 = (v2 - v1).normalize();
-  Vector v31 = (v3 - v1).normalize();
-  this->normal = cross(v21, v31).normalize();
+  this->normal = cross((v2 - v1), (v3 - v1)).normalize();
 }
 
 BBox Triangle::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+  Point min = rt::min(rt::min(v1, v2), v3);
+  Point max = rt::max(rt::max(v1, v2), v3);
+	return BBox(min, max);
 }
 
 Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) const {
