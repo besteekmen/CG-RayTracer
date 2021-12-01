@@ -3,8 +3,22 @@
 
 #include <rt/groups/group.h>
 #include <rt/bbox.h>
+#include <rt/primitive.h>
 
 namespace rt {
+
+class BVHNode {
+public:
+	BVHNode() {}
+
+	BBox bbox;
+	BVHNode* left = nullptr;
+	BVHNode* right = nullptr;
+	bool isLeaf;
+
+	typedef std::vector<Primitive*> Primitives;
+	Primitives primitives;
+};
 
 class BVH : public Group {
 public:
@@ -16,6 +30,10 @@ public:
     virtual void add(Primitive* p);
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
+
+		virtual float splitMiddle(int idx, BVHNode* node);
+		virtual float splitSAH(int idx, BVHNode* node);
+    virtual void buildRecursive(BVHNode* node);
 
     // Do not use this structure as your node layout:
     // It is inefficient and has a large memory footprint.
@@ -47,6 +65,9 @@ public:
         virtual const SerializedNode& readNode(size_t nodeId) = 0;
     };
     void deserialize(Input& input);
+
+private:
+  BVHNode* root = new BVHNode();
 };
 
 }
