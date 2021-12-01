@@ -17,8 +17,8 @@ public:
     BBox() {/*this->isEmpty = true;*/}
     BBox(const Point& min, const Point& max)
     {
-      this->min = min;
-      this->max = max;
+      this->min = rt::min(min, max);
+      this->max = rt::max(min, max);
       this->isEmpty = false;
     }
 
@@ -43,7 +43,7 @@ public:
 
     bool isUnbound() const;
     Point centroid() const;
-    //int largestAxisIndex();
+    int largestAxis() const;
     bool isEmpty;
 };
 

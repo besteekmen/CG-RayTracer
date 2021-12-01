@@ -63,4 +63,17 @@ Point BBox::centroid() const {
   return Point((min.x + max.x)/2, (min.y + max.y)/2, (min.z + max.z)/2);
 }
 
+int BBox::largestAxis() const {
+  // return the index and the length of the largest axis, 0:x,1:y, 2:z
+  float lenx = max.x - min.x;
+  float leny = max.y - min.y;
+  float lenz = max.z - min.z;
+
+  float length = std::max(std::max(lenx, leny), lenz);
+  int axisIndex = (fabs(length - lenx) <= epsilon) ? 0 : 2;
+  axisIndex = (fabs(length - leny) <= epsilon) ? 1 : axisIndex;
+
+  return axisIndex;
+}
+
 }
