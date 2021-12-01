@@ -14,7 +14,7 @@ Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance)
       Intersection intersection = primitives[i]->intersect(ray, previousBestDistance);
       float distance = intersection.distance;
 
-      if (intersection && (distance < previousBestDistance) && (distance>std::numeric_limits<float>::epsilon())){
+      if (intersection && (distance < previousBestDistance) && (distance>epsilon)){
           previousBestDistance = distance;
           Nearest_Intersection = intersection;
           found = true;

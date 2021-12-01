@@ -15,7 +15,7 @@ BBox Sphere::getBounds() const {
 }
 
 bool is_t_valid(float t, float previousBestDistance){
-    return (t < previousBestDistance && t >= std::numeric_limits<float>::epsilon());
+    return (t < previousBestDistance && t >= epsilon);
 }
 
 Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const {
