@@ -10,7 +10,6 @@ BVH::BVH()
 
 void BVH::rebuildIndex() {
   root->primitives = primitives;
-  root->bbox = root->getBounds();
   buildRecursive(root);
   return;
 }
