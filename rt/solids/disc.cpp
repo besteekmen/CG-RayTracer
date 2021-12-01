@@ -10,7 +10,9 @@ Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper*
 }
 
 BBox Disc::getBounds() const {
-	return BBox(center - Vector(radius, radius, radius), center + Vector(radius, radius, radius));
+	Point min = center - Vector(radius, radius, radius);
+	Point max = center + Vector(radius, radius, radius);
+	return BBox(min, max);
 }
 
 Intersection Disc::intersect(const Ray& ray, float previousBestDistance) const {
