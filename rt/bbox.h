@@ -4,6 +4,7 @@
 #include <utility>
 #include <core/point.h>
 #include <core/vector.h>
+#include <cmath>
 
 namespace rt {
 
@@ -32,9 +33,9 @@ public:
     }
 
     float area() const {
-      float x = std::abs(min.x - max.x);
-      float y = std::abs(min.y - max.y);
-      float z = std::abs(min.z - max.z);
+      float x = fabs(min.x - max.x);
+      float y = fabs(min.y - max.y);
+      float z = fabs(min.z - max.z);
       return 2 * (x*y + y*z + z*x);
     }
 

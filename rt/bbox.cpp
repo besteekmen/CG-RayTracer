@@ -1,4 +1,7 @@
 #include <rt/bbox.h>
+#include <rt/primitive.h>
+#include <rt/ray.h>
+#include <algorithm>
 
 namespace rt {
 
@@ -21,8 +24,8 @@ void BBox::extend(const Point& point) {
     max = point;
     return;
   }
-  min = min(this->min, point);
-  max = max(this->max, point);
+  min = rt::min(this->min, point);
+  max = rt::max(this->max, point);
   return;
 }
 
@@ -33,8 +36,8 @@ void BBox::extend(const BBox& bbox) {
     max = bbox.max;
     return;
   }
-  min = min(this->min, bbox.min);
-  max = max(this->max, bbox.max);
+  min = rt::min(this->min, bbox.min);
+  max = rt::max(this->max, bbox.max);
   return;
 }
 
@@ -43,15 +46,15 @@ std::pair<float, float> BBox::intersect(const Ray& ray) const {
   Vector near = (min - ray.o) / ray.d;
   Vector far = (max - ray.o) / ray.d;
 
-  float t_min = max(max(min(near.x, far.x),min(near.y, far.y)),min(near.z, far.z));
-  float t_max = min(min(max(near.x, far.x),max(near.y, far.y)),max(near.z, far.z));
+  float t_min = rt::max(rt::max(rt::min(near.x, far.x),rt::min(near.y, far.y)),rt::min(near.z, far.z));
+  float t_max = rt::min(rt::min(rt::max(near.x, far.x),rt::max(near.y, far.y)),rt::max(near.z, far.z));
 
   return std::make_pair (t_min, t_max);
 }
 
 bool BBox::isUnbound() const {
-  Point minimum = min(min, max);
-  Point maximum = max(min, max);
+  Point minimum = rt::min(min, max);
+  Point maximum = rt::max(min, max);
   return (minimum.x == -FLT_MAX || minimum.y == -FLT_MAX || minimum.z == -FLT_MAX ||
     maximum.x == FLT_MAX || maximum.y == FLT_MAX || maximum.z == FLT_MAX);
 }
