@@ -49,7 +49,7 @@ public:
 		virtual float split(int idx, BVHNode* node);
 		virtual float findSAHSplit(int idx, BVHNode* node);
     virtual void buildRecursive(BVHNode* node);
-	  bool isSAH = true;
+	  bool isSAH = false;
 		int binNum = 16;
 		float bins[16], binsNum[16];
 
