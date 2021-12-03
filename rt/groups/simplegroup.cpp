@@ -3,7 +3,7 @@
 namespace rt {
 
 BBox SimpleGroup::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+  return bbox;
 }
 
 Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance) const {
@@ -14,7 +14,7 @@ Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance)
       Intersection intersection = primitives[i]->intersect(ray, previousBestDistance);
       float distance = intersection.distance;
 
-      if (intersection && (distance < previousBestDistance) && (distance>epsilon)){
+      if (intersection && (distance < previousBestDistance) && (distance > epsilon)){
           previousBestDistance = distance;
           Nearest_Intersection = intersection;
           found = true;
@@ -32,6 +32,7 @@ void SimpleGroup::rebuildIndex() {
 
 void SimpleGroup::add(Primitive* p) {
   this->primitives.push_back(p);
+  bbox.extend(p->getBounds());
 }
 
 void SimpleGroup::setMaterial(Material* m) {

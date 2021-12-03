@@ -23,6 +23,7 @@ public:
 
     bool operator==(const Point& b) const;
     bool operator!=(const Point& b) const;
+    float getAxis(const int index) const;
 
 };
 

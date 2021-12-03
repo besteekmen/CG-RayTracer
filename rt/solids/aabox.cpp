@@ -4,12 +4,12 @@ namespace rt {
 
 AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper, Material* material)
 {
-    this->minCorner = min(corner1, corner2);
-		this->maxCorner = max(corner1, corner2);
+  this->minCorner = min(corner1, corner2);
+  this->maxCorner = max(corner1, corner2);
 }
 
 BBox AABox::getBounds() const {
-    NOT_IMPLEMENTED;
+  return BBox(minCorner, maxCorner);
 }
 
 Solid::Sample AABox::sample() const {
@@ -24,7 +24,6 @@ float AABox::getArea() const {
 }
 
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {
-
   Vector near = (minCorner - ray.o) / ray.d;
   Vector far = (maxCorner - ray.o) / ray.d;
 

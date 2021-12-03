@@ -11,7 +11,9 @@ Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Materi
 }
 
 BBox Sphere::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+	Point min = center - Vector(radius, radius, radius);
+  Point max = center + Vector(radius, radius, radius);
+	return BBox(min, max);
 }
 
 bool is_t_valid(float t, float previousBestDistance){
@@ -48,7 +50,7 @@ Solid::Sample Sphere::sample() const {
 }
 
 float Sphere::getArea() const {
-    return (4*pi*pow(radius, 2));
+	return (4*pi*pow(radius, 2));
 }
 
 }

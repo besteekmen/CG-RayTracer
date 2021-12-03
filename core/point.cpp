@@ -54,4 +54,13 @@ Point max(const Point& a, const Point& b) {
   return Point(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 }
 
+float Point::getAxis(const int index) const {
+    if (index == 0)
+        return x;
+    else if (index == 1)
+        return y;
+    else
+        return z;
+}
+
 }
