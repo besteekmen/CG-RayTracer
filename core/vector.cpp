@@ -46,8 +46,11 @@ Vector operator * (const Vector& a, float scalar) {
 }
 
 Vector operator / (const Vector& a, float scalar) {
-  assert(scalar != 0.0);
-  scalar = 1.0 / scalar;
+  //assert(scalar != 0.0);
+  if(scalar == 0.0)
+    scalar = 1.0 / epsilon;
+  else
+    scalar = 1.0 / scalar;
   return scalar * a;
 }
 
