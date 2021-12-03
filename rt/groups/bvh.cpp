@@ -14,20 +14,60 @@ void BVH::rebuildIndex() {
   return;
 }
 
-float BVH::splitMiddle(int axisIndex, BVHNode* node) {
+float BVH::split(int axisIndex, BVHNode* node, bool isSAH) {
   // find the middle of the longest axis with axisIndex
-  return node->bbox.centroid().getAxis(axisIndex);
+  if (isSAH) {
+    return findSAHSplit(axisIndex, node, 16);
+  } else {
+    return node->getBounds().centroid().getAxis(axisIndex);
+  }
 }
 
-float BVH::splitSAH(int axisIndex, BVHNode* node) {
-  // find the middle of the longest axis with axisIndex
-  return node->bbox.centroid().getAxis(axisIndex);
+float BVH::findSAHSplit(int axisIndex, BVHNode* parent, int binNum) {
+  float bins[binNum], bins_n[binNum];
+
+  for (int i = 0; i < binNum; i++) {
+    bins[i] = 0; bins_n[i] = 0;
+	}
+	float mid, primMid; int num;
+  float axisLength = parent->bbox.max.getAxis(axisIndex) - parent->bbox.min.getAxis(axisIndex);
+
+  // implement binning SAH since it is faster then sweep SAH
+  for (int i = 0; i < parent->primitives.size(); i++) {
+    BBox pbox = parent->primitives[i]->getBounds();
+    mid = pbox.centroid().getAxis(axisIndex);
+    primMid = parent->bbox.min.getAxis(axisIndex);
+    num = roundf((mid - primMid) / axisLength * (binNum - 1));
+
+		bins[num] += parent->primitives[i]->getBounds().area();
+		bins_n[num] ++;
+	}
+
+  // compute cost for SAH
+	float SA_L = 0, N_L = 0, cbest = FLT_MAX, cleft, cright, sah_split;
+	for (int i = 1; i <= binNum; i++) {
+		SA_L = 0;
+		N_L = 0;
+		for (int j = 0; j < i; j++) {
+      SA_L = SA_L + bins[j];
+      N_L = N_L + bins_n[j];
+    }
+
+		cleft = SA_L / parent->area * N_L;
+		cright = (parent->area - SA_L) / parent->area * (parent->primitives.size() - N_L);
+		if ((cleft + cright) < cbest) {
+      sah_split = i; cbest = cleft + cright;
+    }
+	}
+
+  return parent->bbox.min.getAxis(axisIndex) + ((sah_split/binNum) * axisLength);
 }
 
 void BVH::buildRecursive(BVHNode* node) {
   Primitive* primitive;
-  float axisLength;
+  float splitLength, primSplitLength;
   int axisIndex;
+  bool isSAH = false;
 
   int size = node->primitives.size();
 
@@ -35,10 +75,10 @@ void BVH::buildRecursive(BVHNode* node) {
     return;
 
   else {
-    node->bbox = BBox::empty();
+    //node->bbox = BBox::empty();
 
-    for (int i=0; i<size; i++)
-      node->bbox.extend(node->primitives[i]->getBounds());
+    //for (int i=0; i<size; i++)
+    //  node->bbox.extend(node->primitives[i]->getBounds());
 
     if (size < 3) {
       node->isLeaf = true;
@@ -51,25 +91,26 @@ void BVH::buildRecursive(BVHNode* node) {
       node->right = new BVHNode();
 
       axisIndex = node->bbox.largestAxis();
-      axisLength = node->bbox.centroid().getAxis(axisIndex);
-      // also for SAH
+      splitLength = split(axisIndex, node, isSAH);
 
       for (int i=0; i<size; i++) {
         primitive = node->primitives[i];
 
-        if (primitive->getBounds().centroid().getAxis(axisIndex) <= axisLength)
-          node->left->primitives.push_back(primitive);
+        if (primitive->getBounds().centroid().getAxis(axisIndex) <= splitLength)
+          node->left->add(primitive);
         else
-          node->right->primitives.push_back(primitive);
+          node->right->add(primitive);
       }
 
       if (node->left->primitives.size() == 0) {
-        node->left->primitives.push_back(node->right->primitives[0]);
+        node->left->add(node->right->primitives[0]);
+        // need to update area as well
         node->right->primitives.erase(node->right->primitives.begin());
       }
 
       else if (node->right->primitives.size() == 0) {
-        node->right->primitives.push_back(node->left->primitives[0]);
+        node->right->add(node->left->primitives[0]);
+        // need to update area as well
         node->left->primitives.erase(node->left->primitives.begin());
       }
 

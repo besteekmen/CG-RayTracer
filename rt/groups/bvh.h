@@ -9,15 +9,30 @@ namespace rt {
 
 class BVHNode {
 public:
-	BVHNode() {}
+	BVHNode() {this->bbox = BBox::empty(); area = 0;}
 
 	BBox bbox;
 	BVHNode* left = nullptr;
 	BVHNode* right = nullptr;
 	bool isLeaf;
+	float area;
 
 	typedef std::vector<Primitive*> Primitives;
 	Primitives primitives;
+
+	virtual void add(Primitive* p) {
+	  this->primitives.push_back(p);
+	  bbox.extend(p->getBounds());
+		area = bbox.area();
+	};
+
+	virtual BBox getBounds() const {
+		return bbox;
+	};
+
+	virtual float getArea() const {
+		return area;
+	};
 };
 
 class BVH : public Group {
@@ -31,8 +46,8 @@ public:
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
 
-		virtual float splitMiddle(int idx, BVHNode* node);
-		virtual float splitSAH(int idx, BVHNode* node);
+		virtual float split(int idx, BVHNode* node, bool isSAH);
+		virtual float findSAHSplit(int idx, BVHNode* node, int binNum);
     virtual void buildRecursive(BVHNode* node);
 
     // Do not use this structure as your node layout:
