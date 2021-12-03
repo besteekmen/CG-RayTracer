@@ -46,9 +46,12 @@ public:
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
 
-		virtual float split(int idx, BVHNode* node, bool isSAH);
-		virtual float findSAHSplit(int idx, BVHNode* node, int binNum);
+		virtual float split(int idx, BVHNode* node);
+		virtual float findSAHSplit(int idx, BVHNode* node);
     virtual void buildRecursive(BVHNode* node);
+	  bool isSAH = true;
+		int binNum = 16;
+		float bins[16], binsNum[16];
 
     // Do not use this structure as your node layout:
     // It is inefficient and has a large memory footprint.
