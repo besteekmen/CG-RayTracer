@@ -17,5 +17,9 @@ set(ASSIGNMENT_SOURCES
 file(COPY
     models/cow.obj
     models/cow.mtl
+    # models/plant.obj
+    # models/deer.obj
+    # models/cat.obj
+    # models/sitting.obj
     DESTINATION ${CMAKE_BINARY_DIR}/models
 )
