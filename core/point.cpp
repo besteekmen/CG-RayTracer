@@ -15,7 +15,11 @@ Point::Point(float x, float y, float z)
 
 Point::Point(const Float4& f4)
 {
-    /* TODO */ NOT_IMPLEMENTED;
+    //If |f4.w|< epsilon, it is a vector... not a point
+    assert(fabs(f4.w) >= epsilon);
+    this->x = f4.x/f4.w;
+    this->y = f4.y/f4.w;
+    this->z = f4.z/f4.w;
 }
 
 Vector Point::operator - (const Point& b) const {
@@ -24,9 +28,9 @@ Vector Point::operator - (const Point& b) const {
 
 bool Point::operator == (const Point& b) const {
   // set bools for each float comparison with epsilon
-  bool bool_x = (fabs(x - b.x) <= ((fabs(x) < fabs(b.x) ? fabs(b.x) : fabs(x)) * std::numeric_limits<float>::epsilon()));
-  bool bool_y = (fabs(y - b.y) <= ((fabs(y) < fabs(b.y) ? fabs(b.y) : fabs(y)) * std::numeric_limits<float>::epsilon()));
-  bool bool_z = (fabs(z - b.z) <= ((fabs(z) < fabs(b.z) ? fabs(b.z) : fabs(z)) * std::numeric_limits<float>::epsilon()));
+  bool bool_x = (fabs(x - b.x) <= epsilon);
+  bool bool_y = (fabs(y - b.y) <= epsilon);
+  bool bool_z = (fabs(z - b.z) <= epsilon);
 
   if(bool_x && bool_y && bool_z)
     return true;
@@ -52,6 +56,15 @@ Point min(const Point& a, const Point& b) {
 
 Point max(const Point& a, const Point& b) {
   return Point(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+}
+
+float Point::getAxis(const int index) const {
+    if (index == 0)
+        return x;
+    else if (index == 1)
+        return y;
+    else
+        return z;
 }
 
 }
