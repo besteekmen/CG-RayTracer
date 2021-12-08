@@ -160,7 +160,7 @@ Matrix Matrix::identity() {
 
 Matrix Matrix::system(const Vector& e1, const Vector& e2, const Vector& e3) {
     /* TODO */
-    return(Matrix(Float4(e1), Float4(e2), Float4(e3), Float4(0, 0, 0, 1)));
+    return(Matrix(Float4(e1), Float4(e2), Float4(e3), Float4(0, 0, 0, 1)).transpose());
 }
 
 }
