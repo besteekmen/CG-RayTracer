@@ -60,37 +60,37 @@ float Float4::operator [] (int idx) const {
 
 Float4 Float4::operator + (const Float4& b) const {
     /* TODO */
-    return(Float4(this->x + b.x, this->y + b.y, this->z + b.z, this->w + b.z));
+    return(Float4(this->x + b.x, this->y + b.y, this->z + b.z, this->w + b.w));
 }
 
 Float4 Float4::operator - (const Float4& b) const {
     /* TODO */
-    return(Float4(this->x - b.x, this->y - b.y, this->z - b.z, this->w - b.z));
+    return(Float4(this->x - b.x, this->y - b.y, this->z - b.z, this->w - b.w));
 }
 
 Float4 Float4::operator * (const Float4& b) const {
     /* TODO */
-    return(Float4(this->x * b.x, this->y * b.y, this->z * b.z, this->w * b.z));
+    return(Float4(this->x * b.x, this->y * b.y, this->z * b.z, this->w * b.w));
 }
 
 Float4 Float4::operator / (const Float4& b) const {
     /* TODO */
-    return(Float4(this->x / b.x, this->y / b.y, this->z / b.z, this->w / b.z));
+    return(Float4(this->x / b.x, this->y / b.y, this->z / b.z, this->w / b.w));
 }
 
 Float4 operator * (float scalar, const Float4& b) {
     /* TODO */
-    return(Float4(scalar * b.x, scalar * b.y, scalar * b.z, scalar * b.z));
+    return(Float4(scalar * b.x, scalar * b.y, scalar * b.z, scalar * b.w));
 }
 
 Float4 operator * (const Float4& a, float scalar) {
     /* TODO */
-    return(Float4(a.x * scalar, a.y * scalar, a.z * scalar, a.z * scalar));
+    return(Float4(a.x * scalar, a.y * scalar, a.z * scalar, a.w * scalar));
 }
 
 Float4 operator / (const Float4& a, float scalar) {
     /* TODO */
-    return(Float4(a.x / scalar, a.y / scalar, a.z / scalar, a.z / scalar));
+    return(Float4(a.x / scalar, a.y / scalar, a.z / scalar, a.w / scalar));
 }
 
 float dot(const Float4& a, const Float4& b) {
@@ -106,7 +106,7 @@ Float4 Float4::operator - () const {
 bool Float4::operator == (const Float4& b) const {
     /* TODO */
 
-    if ((fabs(x - b.x) <= epsilon) && (fabs(y - b.y) <= epsilon) && (fabs(z - b.z) <= epsilon))
+    if ((fabs(x - b.x) <= epsilon) && (fabs(y - b.y) <= epsilon) && (fabs(z - b.z) <= epsilon) && (fabs(w - b.w) <= epsilon))
         return true;
     else
         return false;
