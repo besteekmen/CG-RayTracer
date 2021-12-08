@@ -7,8 +7,6 @@ namespace rt {
 
 class Quad : public Solid {
 public:
-    Point vertex;
-    Vector span1, span2;
     Quad() {}
     Quad(const Point& v1, const Vector& span1, const Vector& span2, CoordMapper* texMapper, Material* material);
 
@@ -16,6 +14,16 @@ public:
     virtual Intersection intersect(const Ray& ray, float previousBestDistance = FLT_MAX) const;
     virtual Sample sample() const;
     virtual float getArea() const;
+private:
+  	Point v1;
+  	Point v2;
+  	Point v3;
+  	Point v4;
+
+  	Vector span1;
+  	Vector span2;
+  	Vector normal;
+  	Point center;
 };
 
 }
