@@ -17,7 +17,11 @@ Vector::Vector(float x, float y, float z)
 
 Vector::Vector(const Float4& f4)
 {
-    /* TODO */
+    // Since f4.w is float, f4.w==0 ~ f4.w<epsilon
+    assert(fabs(f4.w) <= epsilon);
+    this->x = f4.x;
+    this->y = f4.y;
+    this->z = f4.z;
 }
 
 Vector Vector::operator + (const Vector& b) const {
@@ -46,9 +50,20 @@ Vector operator * (const Vector& a, float scalar) {
 }
 
 Vector operator / (const Vector& a, float scalar) {
-  assert(scalar != 0.0);
-  scalar = 1.0 / scalar;
+  //assert(scalar != 0.0);
+  if(scalar == 0.0)
+    scalar = 1.0 / epsilon;
+  else
+    scalar = 1.0 / scalar;
   return scalar * a;
+}
+
+Vector operator / (const Vector& a, const Vector& b) {
+  float x_comp = 1.0 / b.x;
+  float y_comp = 1.0 / b.y;
+  float z_comp = 1.0 / b.z;
+  assert(x_comp && y_comp && z_comp);
+  return Vector((a.x * x_comp), (a.y * y_comp), (a.z * z_comp));
 }
 
 Vector cross(const Vector& a, const Vector& b) {
@@ -69,9 +84,9 @@ float Vector::length() const {
 
 bool Vector::operator == (const Vector& b) const {
   // set bools for each float comparison with epsilon
-  bool bool_x = (fabs(x - b.x) <= ((fabs(x) < fabs(b.x) ? fabs(b.x) : fabs(x)) * std::numeric_limits<float>::epsilon()));
-  bool bool_y = (fabs(y - b.y) <= ((fabs(y) < fabs(b.y) ? fabs(b.y) : fabs(y)) * std::numeric_limits<float>::epsilon()));
-  bool bool_z = (fabs(z - b.z) <= ((fabs(z) < fabs(b.z) ? fabs(b.z) : fabs(z)) * std::numeric_limits<float>::epsilon()));
+  bool bool_x = (fabs(x - b.x) <= epsilon);
+  bool bool_y = (fabs(y - b.y) <= epsilon);
+  bool bool_z = (fabs(z - b.z) <= epsilon);
 
   if(bool_x && bool_y && bool_z)
     return true;
@@ -104,7 +119,7 @@ Point operator - (const Point& a, const Vector& b) {
 }
 
 Point operator * (const Float4& scale, const Point& p) {
-    /* TODO */ NOT_IMPLEMENTED;
+  return(Point(p.x * scale.x / scale.w, p.y * scale.y / scale.w, p.z * scale.z / scale.w));
 }
 
 }
