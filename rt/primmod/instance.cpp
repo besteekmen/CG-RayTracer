@@ -37,9 +37,9 @@ void Instance::rotate(const Vector& nnaxis, float angle) {
     else {
         s = Vector(-nnaxis.y, nnaxis.x, 0).normalize();
     }
-    Vector t = cross(nnaxis, s);
+    Vector t = cross(nnaxis, s).normalize();
     //Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
-    Matrix M = Matrix::system(nnaxis,s,t);
+    Matrix M = Matrix::system(nnaxis.normalize(), s, t);
     Matrix Rotate = Matrix::identity();
     Rotate[1][1] = cos(angle);
     Rotate[1][2] = -sin(angle);
