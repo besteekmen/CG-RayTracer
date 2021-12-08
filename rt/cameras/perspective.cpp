@@ -5,18 +5,25 @@ namespace rt {
 
 PerspectiveCamera::PerspectiveCamera(const Point& center, const Vector& forward, const Vector& up, float verticalOpeningAngle, float horizontalOpeningAngle)
 {
-    /* TODO */
     this->center = center;
-    this->forward = forward;
-    this->x_basis = cross(forward, up);
-    this->y_basis = cross(this->x_basis, forward);
-    this->x_basis = this->x_basis * forward.length() * tan(horizontalOpeningAngle / 2) / this->x_basis.length();
-    this->y_basis = this->y_basis * forward.length() * tan(verticalOpeningAngle / 2) / this->y_basis.length();
+  	this->forward = forward;
+  	this->up = up;
+    this->verticalOpeningAngle = verticalOpeningAngle;
+    this->horizontalOpeningAngle = horizontalOpeningAngle;
+
+    this->scaleX = tan(this->horizontalOpeningAngle/2.0f);
+    this->scaleY = tan(this->verticalOpeningAngle/2.0f);
+
+    this->CamZAxis = this->forward.normalize();
+    this->CamXAxis = cross(this->forward, this->up.normalize()).normalize();
+    this->CamYAxis = cross(this->CamXAxis, this->CamZAxis).normalize();
+
 }
 
 Ray PerspectiveCamera::getPrimaryRay(float x, float y) const {
-    /* TODO NOT_IMPLEMENTED;*/
-    return(Ray(this->center, (forward + x * this->x_basis + y * this->y_basis).normalize()));
+		Vector dir = (x * CamXAxis * scaleX + y * CamYAxis * scaleY +  CamZAxis).normalize();
+		return Ray(center, dir);
+
 }
 
 }
