@@ -1,32 +1,24 @@
 #include <rt/solids/infiniteplane.h>
-#include<cmath>
 
 namespace rt {
 
-InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material): Solid(texMapper, material)
+InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
-    this->origin = origin;
-    this->normal = normal;
+  this->origin = origin;
+  this->normal = normal;
+  this->texMapper = texMapper;
+  this->material = material;
 }
 
 BBox InfinitePlane::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+  return BBox::full();
 }
 
 Intersection InfinitePlane::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */
-    float denominator = dot(this->normal, ray.d);
-    if (abs(denominator) <= std::numeric_limits<float>::epsilon()) {
-        return(Intersection::failure());
-    }
-    float distance = dot(this->normal, this->origin - ray.o)/denominator;
-    if (distance > 0 && distance<previousBestDistance) {
-        return(Intersection(distance, ray, this, this->normal, ray.getPoint(distance)));
-    }
-    return(Intersection::failure());
-    
-
+  if (dot(ray.d, this->normal) == 0.0) return Intersection::failure();
+	float t = - dot(ray.o - origin, normal) / dot(ray.d, this->normal);
+	if (t > previousBestDistance || t < 0) return Intersection::failure();
+	return Intersection(t, ray, this, this->normal, ray.getPoint(t));
 }
 
 Solid::Sample InfinitePlane::sample() const {
@@ -34,8 +26,7 @@ Solid::Sample InfinitePlane::sample() const {
 }
 
 float InfinitePlane::getArea() const {
-    /* TODO */ NOT_IMPLEMENTED;
-    return(FLT_MAX);
+  return FLT_MAX;
 }
 
 }

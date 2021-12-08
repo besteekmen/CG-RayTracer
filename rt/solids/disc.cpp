@@ -2,34 +2,29 @@
 
 namespace rt {
 
-Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material): Solid(texMapper, material)
+Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
-    this->center = center;
-    this->radius = radius;
-    this->normal = normal;
+	this->center = center;
+	this->normal = normal;
+	this->radius = radius;
 }
 
 BBox Disc::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+	Point min = center - Vector(radius, radius, radius);
+	Point max = center + Vector(radius, radius, radius);
+	return BBox(min, max);
 }
 
 Intersection Disc::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */
-    float denominator = dot(this->normal, ray.d);
-    if (abs(denominator) <= std::numeric_limits<float>::epsilon()) {
-        return(Intersection::failure());
-    }
-    float distance = dot(this->normal, this->center - ray.o) / denominator;
-    if (distance > 0 && distance<previousBestDistance) {
-        float distance_center_to_point = (ray.getPoint(distance) - this->center).length();
-        if (distance_center_to_point > this->radius) {
-            return(Intersection::failure());
-        }
-        return(Intersection(distance, ray, this, this->normal, ray.getPoint(distance)));
-    }
-    return(Intersection::failure());
+	if (dot(ray.d, this->normal) == 0.0) return Intersection::failure();
+	float t = - dot(ray.o - center, this->normal) / dot(ray.d, this->normal);
+	if (t > previousBestDistance || t < 0) return Intersection::failure();
 
+	Point hit_point = ray.getPoint(t);
+	if ((hit_point - center).length() > radius)
+		return Intersection::failure();
+
+	return Intersection(t, ray, this, this->normal, hit_point);
 }
 
 Solid::Sample Disc::sample() const {
@@ -37,8 +32,7 @@ Solid::Sample Disc::sample() const {
 }
 
 float Disc::getArea() const {
-    /* TODO */
-    return(pi * pow(this->radius, 2));
+	return pi * pow(radius,2);
 }
 
 }
