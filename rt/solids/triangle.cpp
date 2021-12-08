@@ -2,54 +2,57 @@
 
 namespace rt {
 
-Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material): Solid(texMapper, material)
+Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
-    for (int i = 0; i < 3; i++) {
-        this->vertices[i] = vertices[i];
-    }
+  this->v1 = vertices[0];
+  this->v2 = vertices[1];
+  this->v3 = vertices[2];
 }
 
-Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
+Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
-    this->vertices[0] = v1;
-    this->vertices[1] = v2;
-    this->vertices[2] = v3;
+  this->v1 = v1;
+  this->v2 = v2;
+  this->v3 = v3;
+  this->normal = cross((v2 - v1), (v3 - v1)).normalize();
 }
 
 BBox Triangle::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+  Point min = rt::min(rt::min(v1, v2), v3);
+  Point max = rt::max(rt::max(v1, v2), v3);
+	return BBox(min, max);
 }
 
 Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */
-    Vector n_12, n_23, n_31;
-    n_12 = cross((vertices[0] - ray.o), (vertices[1] - ray.o));
-    n_23 = cross((vertices[1] - ray.o), (vertices[2] - ray.o));
-    n_31 = cross((vertices[2] - ray.o), (vertices[0] - ray.o));
-    float lam_star_1, lam_star_2, lam_star_3;
-    lam_star_3 = dot(n_12, ray.d);
-    lam_star_1 = dot(n_23, ray.d);
-    lam_star_2 = dot(n_31, ray.d);
-    float lamdas[3];
-    lamdas[0] = lam_star_1 / (lam_star_1 + lam_star_2 + lam_star_3);
-    lamdas[1] = lam_star_2 / (lam_star_1 + lam_star_2 + lam_star_3);
-    lamdas[2] = lam_star_3 / (lam_star_1 + lam_star_2 + lam_star_3);
-    if (lamdas[0] > 0 && lamdas[1] > 0 && lamdas[2] > 0) {
-        Vector resultant_direction = lamdas[0] * (vertices[0] - ray.o) + lamdas[1] * (vertices[1] - ray.o) + lamdas[2] * (vertices[2] - ray.o);
-        float distance = resultant_direction.length() / ray.d.length();
-        Vector normal = cross(vertices[2] - vertices[1], vertices[0] - vertices[1]).normalize();
-        /*if (dot(normal, ray.d) > 0) {
-            normal = -normal;
-        }*/
-        if (distance < previousBestDistance) {
-            return(Intersection(distance, ray, this, normal, Point(lamdas[0], lamdas[1], lamdas[2])));
-        }
-        
-    }
-    return(Intersection::failure());
+  // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
+  if (dot(ray.d, this->normal) == 0.0) return Intersection::failure();
+  float t = - dot(ray.o - v1, normal) / dot(ray.d, this->normal);
+	if (t > previousBestDistance || t < epsilon) return Intersection::failure();
 
+  Vector e1 = v2 - v1;
+  Vector e2 = v3 - v1;
+  Vector pvec = cross(ray.d, e2);
+  float det = dot(e1, pvec);
+
+  if (fabs(det) < epsilon)
+    return Intersection::failure();
+
+  float invDet = 1.0 / det;
+  Vector tvec = ray.o - v1;
+
+  float u = dot(tvec, pvec) * invDet;
+
+  if (u < 0 || u > 1)
+    return Intersection::failure();
+
+  Vector qvec = cross(tvec, e1);
+  float v = dot(ray.d, qvec) * invDet;
+
+  if (v < 0 || u + v > 1)
+    return Intersection::failure();
+
+  t = dot(e2, qvec) * invDet;
+  return Intersection(t, ray, this, normal, ray.getPoint(t));
 }
 
 Solid::Sample Triangle::sample() const {
@@ -57,8 +60,7 @@ Solid::Sample Triangle::sample() const {
 }
 
 float Triangle::getArea() const {
-    /* TODO */
-    return((cross(vertices[2] - vertices[1], vertices[0] - vertices[1])).length()/2);
+  return cross(v2 - v1, v3 - v1).length() / 2;
 }
 
 }

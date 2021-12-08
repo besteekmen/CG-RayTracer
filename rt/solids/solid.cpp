@@ -5,8 +5,6 @@ namespace rt {
 Solid::Solid(CoordMapper* texMapper, Material* material)
 {
     /* TODO */
-    this->texMapper = texMapper;
-    this->material = material;
 }
 
 }

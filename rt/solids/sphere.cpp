@@ -2,39 +2,47 @@
 
 namespace rt {
 
-Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
+Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
-    this->center = center;
-    this->radius = radius;
+	this->center = center;
+	this->radius = radius;
+	this->texMapper = texMapper;
+	this->material = material;
 }
 
 BBox Sphere::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+	Point min = center - Vector(radius, radius, radius);
+  Point max = center + Vector(radius, radius, radius);
+	return BBox(min, max);
+}
+
+bool is_t_valid(float t, float previousBestDistance){
+    return (t < previousBestDistance && t >= epsilon);
 }
 
 Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */
-    float denominator = dot(ray.d, ray.d);
-    if (abs(denominator) <= std::numeric_limits<float>::epsilon()) {
-        return(Intersection::failure());
-    }
-    float center_projection_distance = dot(ray.d, this->center - ray.o) / denominator;
-    if (center_projection_distance > 0) {
-        Point center_projection_point = ray.getPoint(center_projection_distance);
-        float distance_center_to_point = (center_projection_point - this->center).length();
-        if (distance_center_to_point > this->radius) {
-            return(Intersection::failure());
-        }
-        else {
-            float distance = center_projection_distance - (sqrt(pow(this->radius, 2) - (center_projection_point - this->center).lensqr())/ray.d.length());
-            if (distance < previousBestDistance) {
-                return(Intersection(distance, ray, this, (ray.getPoint(distance) - this->center).normalize(), ray.getPoint(distance)));
-            }
-            
-        }
-    }
-    return(Intersection::failure());
+    float A = dot(ray.d, ray.d);
+		float B = 2.0f * dot(ray.o - center, ray.d);
+		float C = dot(ray.o - center, ray.o - center) - (radius * radius);
+		float t, d = B * B - 4 * A * C;
+    Vector normal;
+
+		if (d < 0.0f) return Intersection::failure();
+    else {
+  			float t1 = (- B + sqrt(d)) / (2 * A);
+  			float t2 = (- B - sqrt(d)) / (2 * A);
+
+  			bool is_t1_valid = is_t_valid(t1, previousBestDistance);
+  			bool is_t2_valid = is_t_valid(t2, previousBestDistance);
+
+  			if (!is_t1_valid && !is_t2_valid) return Intersection::failure();
+  			if (is_t1_valid && is_t2_valid) t = min(t1, t2);
+  			if (!is_t1_valid && is_t2_valid) t = t2;
+  			if (is_t1_valid && !is_t2_valid) t = t1;
+		}
+
+    normal = ray.getPoint(t) - center;
+    return Intersection(t, ray, this, normal.normalize(), ray.getPoint(t));
 }
 
 Solid::Sample Sphere::sample() const {
@@ -42,8 +50,7 @@ Solid::Sample Sphere::sample() const {
 }
 
 float Sphere::getArea() const {
-    /* TODO */
-    return(4 * pi * pow(radius, 2));
+	return (4*pi*pow(radius, 2));
 }
 
 }
