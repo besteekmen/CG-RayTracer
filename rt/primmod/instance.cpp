@@ -38,13 +38,14 @@ void Instance::rotate(const Vector& nnaxis, float angle) {
         s = Vector(-nnaxis.y, nnaxis.x, 0).normalize();
     }
     Vector t = cross(nnaxis, s);
-    Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
+    //Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
+    Matrix M = Matrix::system(nnaxis,s,t);
     Matrix Rotate = Matrix::identity();
     Rotate[1][1] = cos(angle);
     Rotate[1][2] = -sin(angle);
     Rotate[2][1] = sin(angle);
     Rotate[2][2] = cos(angle);
-    transform = product(M_T.transpose(), product(Rotate, product(M_T, transform)));
+    transform = product(M, product(Rotate, product(M.transpose(), transform)));
 }
 
 void Instance::scale(float f) {
@@ -72,11 +73,33 @@ void Instance::setCoordMapper(CoordMapper* cm) {
 }
 
 Intersection Instance::intersect(const Ray& ray, float previousBestDistance) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    Matrix transform_inverse = transform.invert();
+    Ray new_ray = Ray(transform_inverse * ray.o, transform_inverse * ray.d);
+    Intersection hit = archetype->intersect(new_ray, previousBestDistance);
+    if (hit) {
+        return(Intersection(hit.distance, ray, hit.solid, transform * (hit.normalV), ray.getPoint(hit.distance)));
+    }
+    return Intersection::failure();
 }
 
 BBox Instance::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    BBox b = archetype->getBounds();
+    Point corners[8];
+    corners[0] = Point(b.min.x, b.min.y, b.min.z);
+    corners[1] = Point(b.min.x, b.min.y, b.max.z);
+    corners[2] = Point(b.min.x, b.max.y, b.min.z);
+    corners[3] = Point(b.min.x, b.max.y, b.max.z);
+    corners[4] = Point(b.max.x, b.min.y, b.min.z);
+    corners[5] = Point(b.max.x, b.min.y, b.max.z);
+    corners[6] = Point(b.max.x, b.max.y, b.min.z);
+    corners[7] = Point(b.max.x, b.max.y, b.max.z);
+    BBox bbox = BBox::empty();
+    for (uint16_t i = 0; i < 8; i++) {
+        bbox.extend(transform * corners[i]);
+    }
+    return bbox;
 }
 
 }
