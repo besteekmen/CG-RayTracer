@@ -78,7 +78,7 @@ Intersection Instance::intersect(const Ray& ray, float previousBestDistance) con
     Ray new_ray = Ray(transform_inverse * ray.o, transform_inverse * ray.d);
     Intersection hit = archetype->intersect(new_ray, previousBestDistance);
     if (hit) {
-        return(Intersection(hit.distance, ray, hit.solid, transform * (hit.normalV), ray.getPoint(hit.distance)));
+        return(Intersection(hit.distance, ray, hit.solid, (transform_inverse.transpose() * (hit.normalV)).normalize(), ray.getPoint(hit.distance)));
     }
     return Intersection::failure();
 }
