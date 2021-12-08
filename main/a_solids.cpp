@@ -8,6 +8,7 @@
 #include <rt/solids/infiniteplane.h>
 #include <rt/solids/triangle.h>
 #include <rt/solids/quad.h>
+#include <rt/solids/quadric.h>
 #include <rt/solids/disc.h>
 #include <rt/solids/aabox.h>
 #include <rt/cameras/perspective.h>
@@ -25,6 +26,9 @@ void a_solids() {
     scene->add(new Sphere(Point(1,    -1,     1), 2.2f, nullptr, nullptr));
     scene->add(new Sphere(Point(3.f,   0.8f, -2), 2, nullptr, nullptr));
 
+    // To try quadric, use the commented line below
+    //scene->add(new Quadric(7.f,2.f,3.f,0,0,0,10.f,2.f,-1.f,12.f, nullptr, nullptr));
+
     scene->add(new InfinitePlane(Point(0,- 1, 0), Vector(0, 1, 0), nullptr, nullptr));
 
     scene->add(new Triangle(Point(-2, 3.7f, 0), Point(1, 2,  1), Point( 3, 2.8f, -2), nullptr, nullptr));
@@ -39,14 +43,14 @@ void a_solids() {
     world.scene = scene;
 
     PerspectiveCamera cam(Point(0, 0, 10), Vector(0, 0, -1), Vector(0, 1, 0), pi/4, pi/3);
-    
+
 
     RayCastingIntegrator integrator(&world);
     Renderer engine(&cam, &integrator);
     engine.render(img);
     img.writePNG("a2-1.png");
 
-    RayCastingDistIntegrator integratorb(&world, RGBColor(1.0f, 0.2f, 0.0f), 4.0f, RGBColor(0.2f, 1.0f, 0.0f), 12.0f);
+    RayCastingDistIntegrator integratorb(&world, RGBColor(1.0f,0.2f,0.0f), 4.0f, RGBColor(0.2f,1.0f,0.0f), 12.0f);
     Renderer engineb(&cam, &integratorb);
     engineb.render(img);
     img.writePNG("a2-2.png");
