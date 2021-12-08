@@ -3,21 +3,27 @@
 namespace rt {
 
 BBox SimpleGroup::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+  return bbox;
 }
 
 Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance) const {
-    /* TODO */
-    Intersection best_intersection;
-    for (int i = 0; i < this->primitives.size(); i++) {
-        Intersection intersection = primitives[i]->intersect(ray, previousBestDistance);
-        float distance = intersection.distance;
-        if (intersection && distance<previousBestDistance && distance>0){
-            previousBestDistance = distance;
-            best_intersection = intersection;
-        }
-    }
-    return(best_intersection);
+  Intersection Nearest_Intersection;
+  bool found = false;
+  //for (int i = 0; i < this->Primitives.size(); i++)
+  for(std::vector<Primitive *>::size_type i = 0; i != this->primitives.size(); i++) {
+      Intersection intersection = primitives[i]->intersect(ray, previousBestDistance);
+      float distance = intersection.distance;
+
+      if (intersection && (distance < previousBestDistance) && (distance > epsilon)){
+          previousBestDistance = distance;
+          Nearest_Intersection = intersection;
+          found = true;
+      }
+  }
+  if (found)
+      return Nearest_Intersection;
+  else
+      return Intersection::failure();
 }
 
 void SimpleGroup::rebuildIndex() {
@@ -25,8 +31,8 @@ void SimpleGroup::rebuildIndex() {
 }
 
 void SimpleGroup::add(Primitive* p) {
-    /* TODO NOT_IMPLEMENTED;*/
-    this->primitives.push_back(p);
+  this->primitives.push_back(p);
+  bbox.extend(p->getBounds());
 }
 
 void SimpleGroup::setMaterial(Material* m) {
