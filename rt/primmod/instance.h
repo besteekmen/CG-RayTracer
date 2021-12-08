@@ -3,11 +3,14 @@
 
 #include <core/vector.h>
 #include <rt/primitive.h>
+#include <core/matrix.h>
 
 namespace rt {
 
 class Instance : public Primitive {
 public:
+    Primitive* archetype;
+    Matrix transform = Matrix::identity();
     Instance(Primitive* content);
     Primitive* content();
 
