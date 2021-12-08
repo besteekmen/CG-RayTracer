@@ -80,7 +80,7 @@ Matrix Matrix::invert() const {
 }
 
 bool Matrix::operator==(const Matrix& b) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
     if (this->row[0] == b.row[0] && this->row[1] == b.row[1] && this->row[2] == b.row[2] && this->row[3] == b.row[3]) {
         return true;
     }
