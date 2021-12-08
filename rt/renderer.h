@@ -2,7 +2,6 @@
 #define CG1RAYTRACER_RENDERER_HEADER
 
 #include <core/scalar.h>
-#include <rt/cameras/camera.h>
 
 namespace rt {
 

@@ -2,8 +2,10 @@
 #include <core/image.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
-#include <iostream>
+#include <rt/cameras/orthographic.h>
+#include <rt/cameras/perspective.h>
 #include <rt/integrators/integrator.h>
+#include <iostream>
 
 namespace rt {
 
@@ -12,17 +14,14 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 {}
 
 void Renderer::render(Image& img) {
-    /* TODO */
-    uint width, height;
-    width = img.width();
-    height = img.height();
-    for (uint i = 0; i < width; i++) {
-        for (uint j = 0; j < height; j++) {
-            float pix_x = (2 * (i + 0.5) / width) - 1;
-            float pix_y = (2 * (j + 0.5) / height) - 1;
-            img(i,j) = this->integrator->getRadiance(cam->getPrimaryRay(pix_x, -pix_y));
-        }
-    }
+  for (uint y = 0; y < img.height(); ++y) {
+      for (uint x = 0; x < img.width(); ++x) {
+          float cameraX = (2.0f * float(x + 0.5f) / float(img.width()) - 1.f);
+          float cameraY = 1.f - 2.0 * float(y + 0.5f) / float(img.height());
+          Ray r = this->cam->getPrimaryRay(cameraX, cameraY);
+          img(x, y) = this->integrator->getRadiance(r);
+      }
+  }
 }
 
 }
@@ -32,15 +31,9 @@ rt::RGBColor a1computeColor(rt::uint x, rt::uint y, rt::uint width, rt::uint hei
 namespace rt {
 
 void Renderer::test_render1(Image& img) {
-    /* TODO NOT_IMPLEMENTED;*/
-    uint width, height;
-    width = img.width();
-    height = img.height();
-    for (uint i = 0; i < width; i++) {
-        for (uint j = 0; j < height; j++) {
-            img(i, j) = a1computeColor(i, j, width, height);
-        }
-    }
+  for (uint y = 0; y < img.height(); ++y)
+      for (uint x = 0; x < img.width(); ++x)
+          img(x, y) = a1computeColor(x, y, img.width(), img.height());
 }
 }
 
@@ -49,17 +42,16 @@ rt::RGBColor a2computeColor(const rt::Ray& r);
 namespace rt {
 
 void Renderer::test_render2(Image& img) {
-    /* TODO NOT_IMPLEMENTED;*/
-    uint width, height;
-    width = img.width();
-    height = img.height();
-    for (uint i = 0; i < width; i++) {
-        for (uint j = 0; j < height; j++) {
-            float pix_x = (2 * (i + 0.5) / width) - 1;
-            float pix_y = (2 * (j + 0.5) / height) - 1;
-            img(i, j) = a2computeColor(cam->getPrimaryRay(pix_x, -pix_y));
-        }
-    }
+  float ImageAspectRatio = img.width()/img.height();
+
+  for (uint y = 0; y < img.height(); ++y) {
+      for (uint x = 0; x < img.width(); ++x) {
+          float cameraX = (2.0f * float(x + 0.5f) / float(img.width()) - 1.f);
+          float cameraY = 1.f - 2.0 * float(y + 0.5f) / float(img.height());
+          Ray r = this->cam->getPrimaryRay(cameraX, cameraY);
+          img(x, y) = a2computeColor(r);
+      }
+  }
 }
 
 }
