@@ -15,7 +15,11 @@ Point::Point(float x, float y, float z)
 
 Point::Point(const Float4& f4)
 {
-    /* TODO */ NOT_IMPLEMENTED;
+    //If |f4.w|< epsilon, it is a vector... not a point
+    assert(fabs(f4.w) >= epsilon);
+    this->x = f4.x/f4.w;
+    this->y = f4.y/f4.w;
+    this->z = f4.z/f4.w;
 }
 
 Vector Point::operator - (const Point& b) const {

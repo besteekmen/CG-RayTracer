@@ -17,7 +17,11 @@ Vector::Vector(float x, float y, float z)
 
 Vector::Vector(const Float4& f4)
 {
-    /* TODO */
+    // Since f4.w is float, f4.w==0 ~ f4.w<epsilon
+    assert(fabs(f4.w) <= epsilon);
+    this->x = f4.x;
+    this->y = f4.y;
+    this->z = f4.z;
 }
 
 Vector Vector::operator + (const Vector& b) const {
@@ -115,7 +119,7 @@ Point operator - (const Point& a, const Vector& b) {
 }
 
 Point operator * (const Float4& scale, const Point& p) {
-    /* TODO */ NOT_IMPLEMENTED;
+  return(Point(p.x * scale.x / scale.w, p.y * scale.y / scale.w, p.z * scale.z / scale.w));
 }
 
 }
