@@ -4,12 +4,11 @@ namespace rt {
 
 Instance::Instance(Primitive* content)
 {
-    this->transform = Matrix::identity();
     this->archetype = content;
 }
 
 Primitive* Instance::content() {
-    return archetype;
+    return(archetype);
 }
 
 void Instance::reset() {
@@ -21,29 +20,28 @@ void Instance::translate(const Vector& t) {
     transform[0][3] = transform[0][3] + t.x;
     transform[1][3] = transform[1][3] + t.y;
     transform[2][3] = transform[2][3] + t.z;
-    //appendToTotal(m);
 }
 
 void Instance::rotate(const Vector& nnaxis, float angle) {
-  Vector s;
-  if (nnaxis.x < nnaxis.y && nnaxis.x < nnaxis.z) {
-      s = Vector(0, -nnaxis.z, nnaxis.y).normalize();
-  }
-  else if (nnaxis.y < nnaxis.x && nnaxis.y < nnaxis.z) {
-      s = Vector(-nnaxis.z, 0, nnaxis.x).normalize();
-  }
-  else {
-      s = Vector(-nnaxis.y, nnaxis.x, 0).normalize();
-  }
-  Vector t = cross(nnaxis, s).normalize();
-  //Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
-  Matrix M = Matrix::system(nnaxis.normalize(), s, t);
-  Matrix Rotate = Matrix::identity();
-  Rotate[1][1] = cos(angle);
-  Rotate[1][2] = -sin(angle);
-  Rotate[2][1] = sin(angle);
-  Rotate[2][2] = cos(angle);
-  transform = product(M, product(Rotate, product(M.transpose(), transform)));
+    Vector s;
+    if (nnaxis.x < nnaxis.y && nnaxis.x < nnaxis.z) {
+        s = Vector(0, -nnaxis.z, nnaxis.y).normalize();
+    }
+    else if (nnaxis.y < nnaxis.x && nnaxis.y < nnaxis.z) {
+        s = Vector(-nnaxis.z, 0, nnaxis.x).normalize();
+    }
+    else {
+        s = Vector(-nnaxis.y, nnaxis.x, 0).normalize();
+    }
+    Vector t = cross(nnaxis, s).normalize();
+    //Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
+    Matrix M = Matrix::system(nnaxis.normalize(), s, t);
+    Matrix Rotate = Matrix::identity();
+    Rotate[1][1] = cos(angle);
+    Rotate[1][2] = -sin(angle);
+    Rotate[2][1] = sin(angle);
+    Rotate[2][2] = cos(angle);
+    transform = product(M, product(Rotate, product(M.transpose(), transform)));
 }
 
 void Instance::scale(float f) {

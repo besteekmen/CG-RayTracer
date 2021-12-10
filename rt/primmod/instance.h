@@ -9,6 +9,8 @@ namespace rt {
 
 class Instance : public Primitive {
 public:
+    Primitive* archetype;
+    Matrix transform = Matrix::identity();
     Instance(Primitive* content);
     Primitive* content();
 
@@ -22,10 +24,6 @@ public:
     virtual Intersection intersect(const Ray& ray, float previousBestDistance = FLT_MAX) const;
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
-
-private:
-    Primitive* archetype;
-    Matrix transform;
 };
 
 }
