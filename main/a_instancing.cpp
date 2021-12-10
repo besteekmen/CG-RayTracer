@@ -2,6 +2,7 @@
 #include <rt/cameras/perspective.h>
 #include <rt/groups/group.h>
 #include <rt/groups/simplegroup.h>
+#include <rt/groups/bvh.h>
 #include <rt/primmod/instance.h>
 #include <rt/integrators/casting.h>
 #include <rt/world.h>
@@ -24,7 +25,7 @@ void addTree(Group* g, int trunkTessel, float trunkHeight, float trunkRadius, fl
     for (int i = 0; i < trunkTessel; ++i) {
         float angle = i * trunkStep;
         float angleNext = (i+1) * trunkStep;
-        
+
         Point start(trunkRadius * sin(angle), 0.0f, trunkRadius * cos(angle));
         Point end(trunkRadius * sin(angleNext), 0.0f, trunkRadius * cos(angleNext));
         g->add(new Quad(start, end-start, Vector(0.0f, trunkHeight, 0.0f), nullptr, nullptr));
@@ -35,7 +36,7 @@ void addTree(Group* g, int trunkTessel, float trunkHeight, float trunkRadius, fl
     //crown
     for (int i = 0; i < crownSteps; ++i) {
         float height = trunkHeight + i * crownHeight / crownSteps;
-        
+
         float x = float(crownSteps-i-1)/crownSteps;
         float stepRadius = crownRadius * sin(x*pi);
         if (stepRadius > 0.0f) {
@@ -61,7 +62,8 @@ void a_instancing() {
     addTree(tree, 16, 3.0f, 0.5f, 5.0f, 2.0f, 8, 8);
     tree->rebuildIndex();
 
-    SimpleGroup* scene = new SimpleGroup();
+    //SimpleGroup* scene = new SimpleGroup();
+    BVH* scene = new BVH();
 
     Instance* normal = new Instance(tree);
     scene->add(normal);
