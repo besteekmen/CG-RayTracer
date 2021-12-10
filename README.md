@@ -28,5 +28,5 @@ We have submitted the theoretical part on MS Teams, we solved all the theoretica
 
 We have tested our code both on a Windows (development platform) and a Linux system and we have generated the result image in both with no problem.
 
-Test platform 1: Windows 11, C++ 17.
-Test platform 2: Ubuntu 16.04 LTS, C++ 17
+* Test platform 1: Windows 11, C++ 17.
+* Test platform 2: Ubuntu 16.04 LTS, C++ 17
