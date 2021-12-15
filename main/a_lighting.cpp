@@ -14,6 +14,7 @@
 #include <rt/lights/pointlight.h>
 #include <rt/lights/spotlight.h>
 #include <rt/lights/directional.h>
+#include <rt/lights/projective.h>
 
 #include <rt/integrators/raytrace.h>
 #include <rt/integrators/casting.h>
