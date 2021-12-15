@@ -8,6 +8,7 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
   this->span1 = span1;
   this->span2 = span2;
   this->normal = cross(span1, span2).normalize();
+  this->material = material;
 
   v2 = v1 + this->span1;
   v3 = v1 + this->span1 + this->span2;

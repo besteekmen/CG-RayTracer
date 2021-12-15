@@ -6,6 +6,7 @@ AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper,
 {
   this->minCorner = min(corner1, corner2);
   this->maxCorner = max(corner1, corner2);
+  this->material = material;
 }
 
 BBox AABox::getBounds() const {
