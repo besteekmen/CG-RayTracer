@@ -5,21 +5,26 @@ namespace rt {
 Instance::Instance(Primitive* content)
 {
     this->archetype = content;
+    transform = Matrix::identity();
+    inverse = transform;
 }
 
 Primitive* Instance::content() {
-    return(archetype);
+    return archetype;
 }
 
 void Instance::reset() {
     transform = Matrix::identity();
+    inverse = transform;
 }
 
 void Instance::translate(const Vector& t) {
-    // Equivalent to [[I t],[0 1]] * transform.
-    transform[0][3] = transform[0][3] + t.x;
-    transform[1][3] = transform[1][3] + t.y;
-    transform[2][3] = transform[2][3] + t.z;
+    Matrix translate = Matrix::identity();
+    translate[0][3] = t.x;
+    translate[1][3] = t.y;
+    translate[2][3] = t.z;
+    // concat the operation to total transformation
+    concatTransform(translate);
 }
 
 void Instance::rotate(const Vector& nnaxis, float angle) {
@@ -36,26 +41,32 @@ void Instance::rotate(const Vector& nnaxis, float angle) {
     Vector t = cross(nnaxis, s).normalize();
     //Matrix M_T = Matrix(Float4(nnaxis), Float4(s), Float4(t), Float4(0, 0, 0, 1));
     Matrix M = Matrix::system(nnaxis.normalize(), s, t);
-    Matrix Rotate = Matrix::identity();
-    Rotate[1][1] = cos(angle);
-    Rotate[1][2] = -sin(angle);
-    Rotate[2][1] = sin(angle);
-    Rotate[2][2] = cos(angle);
-    transform = product(M, product(Rotate, product(M.transpose(), transform)));
+    Matrix rotate = Matrix::identity();
+    rotate[1][1] = cos(angle);
+    rotate[1][2] = -sin(angle);
+    rotate[2][1] = sin(angle);
+    rotate[2][2] = cos(angle);
+    // concat the operation to total transformation
+    Matrix total = product(product(M, rotate), M.transpose());
+    concatTransform(total);
 }
 
 void Instance::scale(float f) {
-    // Equivalent to [[sI 0][0 1]] * transform.
-    transform[0] = f * transform[0];
-    transform[1] = f * transform[1];
-    transform[2] = f * transform[2];
+    this->scale(Vector(f, f, f));
 }
 
 void Instance::scale(const Vector& s) {
-    // Equivalent to [[sI 0][0 1]] * transform.
-    transform[0] = s.x * transform[0];
-    transform[1] = s.y * transform[1];
-    transform[2] = s.z * transform[2];
+    Matrix scale = Matrix::identity();
+    scale[0][0] = s.x;
+    scale[1][1] = s.y;
+    scale[2][2] = s.z;
+    // concat the operation to total transformation
+    concatTransform(scale);
+}
+
+void Instance::concatTransform(Matrix& M) {
+    transform = product(M, transform);
+    inverse = transform.invert();
 }
 
 void Instance::setMaterial(Material* m) {
@@ -67,11 +78,10 @@ void Instance::setCoordMapper(CoordMapper* cm) {
 }
 
 Intersection Instance::intersect(const Ray& ray, float previousBestDistance) const {
-    Matrix transform_inverse = transform.invert();
-    Ray new_ray = Ray(transform_inverse * ray.o, transform_inverse * ray.d);
+    Ray new_ray = Ray(this->inverse * ray.o, this->inverse * ray.d);
     Intersection hit = archetype->intersect(new_ray, previousBestDistance);
     if (hit) {
-        return(Intersection(hit.distance, ray, hit.solid, (transform_inverse.transpose() * (hit.normalV)).normalize(), ray.getPoint(hit.distance)));
+        return(Intersection(hit.distance, ray, hit.solid, (this->inverse.transpose() * (hit.normalV)).normalize(), ray.getPoint(hit.distance)));
     }
     return Intersection::failure();
 }
