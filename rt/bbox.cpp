@@ -12,8 +12,8 @@ BBox BBox::empty() {
 }
 
 BBox BBox::full() {
-  Point minimum = Point(__FLT_MIN__, __FLT_MIN__, __FLT_MIN__);
-  Point maximum = Point(__FLT_MAX__, __FLT_MAX__, __FLT_MAX__);
+  Point minimum = Point(FLT_MIN, FLT_MIN, FLT_MIN);
+  Point maximum = Point(FLT_MAX, FLT_MAX, FLT_MAX);
   return BBox(minimum, maximum);
 }
 

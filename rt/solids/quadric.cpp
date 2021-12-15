@@ -7,7 +7,7 @@ namespace rt {
   : a(na), b(nb), c(nc)
   , d(nd), e(ne), f(nf)
   , g(ng), h(nh), i(ni)
-  , j(nj)
+  , j(nj), material(material)
   {
   }
 

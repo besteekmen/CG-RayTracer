@@ -17,6 +17,7 @@ public:
     virtual float getArea() const;
 private:
   	float a,b,c,d,e,f,g,h,i,j;
+    Material* material;
 };
 
 }
