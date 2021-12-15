@@ -1,6 +1,6 @@
-### Introduction to Computer Graphics - Assignment 4 Release
+### Introduction to Computer Graphics - Assignment 5 Release
 
-This release includes the implementations for CG class requested in the Assignment 4.
+This release includes the implementations for CG class requested in the Assignment 5.
 
 #### Students:
 
@@ -15,18 +15,18 @@ This release includes the implementations for CG class requested in the Assignme
 * IDE: VStudio 2021
 
 #### Features:
-We have implemented all mandatory features requested in this assignment.
+We have implemented all mandatory features and BONUS features requested in this assignment.
 Mandatory Features: All
-BONUS features: No BONUS features were asked in this assignment
+BONUS features: Projective Light Source
 
-***Note:*** We have replaced the scene in a_instances.cpp with our BVH for acceleration which has significantly shortened the rendering time (25s).
+***Note:*** We have edited the renderCornellboxA in a_lighting.cpp by replacing three point lights to projective lights to generate the projective light pictures. The originalfile is preserved with additional header for the projective light source. To generate the same image, basically point light sources may be replaced.
 
 #### Theoretical:
-We have submitted the theoretical part on MS Teams, we solved all the theoretical questions (both required and BONUS).
+We have submitted the theoretical part on MS Teams.
 
 #### Tests:
 
-We have tested our code both on a Windows (development platform) and a Linux system and we have generated the result image in both with no problem.
+We have tested our code both on a Windows (development platform) and a Linux system and we have generated the result images in both with no problem.
 
 * Test platform 1: Windows 11, C++ 17.
 * Test platform 2: Ubuntu 16.04 LTS, C++ 17
