@@ -7,6 +7,7 @@ Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material
   this->v1 = vertices[0];
   this->v2 = vertices[1];
   this->v3 = vertices[2];
+  this->material = material;
 }
 
 Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)
@@ -15,6 +16,7 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
   this->v2 = v2;
   this->v3 = v3;
   this->normal = cross((v2 - v1), (v3 - v1)).normalize();
+  this->material = material;
 }
 
 BBox Triangle::getBounds() const {
