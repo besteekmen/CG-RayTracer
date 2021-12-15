@@ -36,7 +36,7 @@ RGBColor RayTracingIntegrator::getRadiance(const Ray& ray) const {
 						color = color + irradiance;
 
         }
-        RGBColor emitted = Intersec.solid->material->getEmission(intersect.local(), intersect.normal(), outDir);
+        RGBColor emitted = intersect.solid->material->getEmission(intersect.local(), intersect.normal(), outDir);
         return color + emitted;
 
     }
