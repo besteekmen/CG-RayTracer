@@ -7,7 +7,6 @@ namespace rt {
 
 class Matrix {
 public:
-    Float4 row[4];
     Matrix() {}
     Matrix(const Float4& r1, const Float4& r2, const Float4& r3, const Float4& r4);
 
@@ -16,7 +15,7 @@ public:
 
     Matrix operator+(const Matrix& b) const;
     Matrix operator-(const Matrix& b) const;
-    
+
     Matrix transpose() const;
     Matrix invert() const;
 
@@ -34,6 +33,8 @@ public:
     static Matrix identity();
 
     static Matrix system(const Vector& e1, const Vector& e2, const Vector& e3);
+private:
+    Float4 row[4];
 };
 
 Matrix product(const Matrix& a, const Matrix& b);
