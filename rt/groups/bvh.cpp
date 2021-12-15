@@ -166,7 +166,8 @@ void BVH::add(Primitive* p) {
 }
 
 void BVH::setMaterial(Material* m) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for(std::vector<Primitive *>::size_type i = 0; i != this->primitives.size(); i++)
+        primitives[i]->setMaterial(m);
 }
 
 void BVH::setCoordMapper(CoordMapper* cm) {
