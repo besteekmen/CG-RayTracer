@@ -14,6 +14,7 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
   v4 = v1 + this->span2;
 
   this->center = v1 + (0.5*this->span1) + (0.5*this->span2);
+  this->material = material;
 
   //t1 = Triangle(v1, v2, v4, texMapper, material);
 	//t2 = Triangle(v2, v4, v3, texMapper, material);

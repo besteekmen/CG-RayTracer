@@ -18,7 +18,6 @@ private:
     Point origin;
     Vector normal;
     CoordMapper* texMapper;
-    Material* material;
 };
 
 }
