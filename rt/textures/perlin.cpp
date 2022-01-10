@@ -1,5 +1,6 @@
 #include <rt/textures/perlin.h>
 #include <core/interpolate.h>
+#include <cmath>
 
 namespace rt {
 
