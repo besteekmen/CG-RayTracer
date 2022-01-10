@@ -17,7 +17,6 @@ public:
 private:
     Point origin;
     Vector normal;
-    CoordMapper* texMapper;
 };
 
 }
