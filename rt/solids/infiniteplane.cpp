@@ -1,4 +1,5 @@
 #include <rt/solids/infiniteplane.h>
+#include <rt/coordmappers/world.h>
 
 namespace rt {
 
@@ -8,6 +9,12 @@ InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMap
   this->normal = normal;
   this->texMapper = texMapper;
   this->material = material;
+  if (texMapper == nullptr) {
+	  this->texMapper = new WorldMapper(Vector::rep(1.0f));
+  }
+  else {
+	  this->texMapper = texMapper;
+  }
 }
 
 BBox InfinitePlane::getBounds() const {
