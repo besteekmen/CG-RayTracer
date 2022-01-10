@@ -1,4 +1,5 @@
 #include <rt/textures/checkerboard.h>
+#include <cmath>
 
 namespace rt {
 
