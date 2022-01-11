@@ -18,6 +18,6 @@ int main(int argc, char* argv[]) {
     a_local();
     a_mappers();
     a_distributed();
-    //a_smooth();
+    a_smooth();
     return 0;
 }
