@@ -96,13 +96,13 @@ void a_distributed() {
     Texture* blacktex = new ConstantTexture(RGBColor::rep(0.0f));
     Texture* whitetex = new ConstantTexture(RGBColor::rep(1.0f));
     Material* floorMaterial1 = new LambertianMaterial(blacktex, whitetex);
-    //Material* floorMaterial2 = new FuzzyMirrorMaterial(2.485f, 3.433f, 0.05f);
+    Material* floorMaterial2 = new FuzzyMirrorMaterial(2.485f, 3.433f, 0.05f);
 
     Material* sphereMaterial1 = floorMaterial1;
-    //Material* sphereMaterial2 = new GlassMaterial(2.0f);
+    Material* sphereMaterial2 = new GlassMaterial(2.0f);
 
     renderCornellbox(0.001f, "a6-5.png", cam, sphereMaterial1, floorMaterial1, 30);
-    //renderCornellbox(0.001f, "a6-6.png", cam, sphereMaterial2, floorMaterial2, 30);
+    renderCornellbox(0.001f, "a6-6.png", cam, sphereMaterial2, floorMaterial2, 30);
     //renderCornellbox(0.001f, "a6-7a.png", dofcam, sphereMaterial2, floorMaterial2, 30);
     //renderCornellbox(0.001f, "a6-7b.png", dofcam, sphereMaterial2, floorMaterial2, 1000);
 }
