@@ -8,6 +8,8 @@ namespace rt {
 
 class SmoothTriangle : public Triangle {
 public:
+    Triangle triangle;
+    Vector normals[3];
     SmoothTriangle() {}
     SmoothTriangle(Point vertices[3], Vector normals[3], CoordMapper* texMapper, Material* material);
     SmoothTriangle(const Point& v1, const Point& v2, const Point& v3, 
