@@ -15,12 +15,12 @@ namespace rt {
         if (hit_point) {
             Point local_hit = hit_point.solid->texMapper->getCoords(hit_point);
             RGBColor color = hit_point.solid->material->getEmission(local_hit, hit_point.normal(), -ray.d);
-            if (hit_point.solid->material->useSampling() == Material::Sampling::SAMPLING_ALL || hit_point.solid->material->useSampling() == Material::Sampling::SAMPLING_SECONDARY) {
+            Material::Sampling sample = hit_point.solid->material->useSampling();
+            if (sample == Material::Sampling::SAMPLING_ALL || sample == Material::Sampling::SAMPLING_SECONDARY) {
                 Material::SampleReflectance sample_reflect = hit_point.solid->material->getSampleReflectance(local_hit, hit_point.normal(), -ray.d);
                 color = color + sample_reflect.reflectance * radiance(Ray(hit_point.hitPoint(), sample_reflect.direction), count + 1);
-                return(color);
             }
-            else if (hit_point.solid->material->useSampling() == Material::Sampling::SAMPLING_NOT_NEEDED || hit_point.solid->material->useSampling() == Material::Sampling::SAMPLING_SECONDARY) {
+            if (sample == Material::Sampling::SAMPLING_NOT_NEEDED || sample == Material::Sampling::SAMPLING_SECONDARY) {
 
                 for (int i = 0; i < world->light.size(); i++) {
                     LightHit light_hit = world->light[i]->getLightHit(hit_point.hitPoint());
@@ -35,9 +35,9 @@ namespace rt {
                     }
                     color = color + (this->world->light[i]->getIntensity(light_hit) * hit_point.solid->material->getReflectance(local_hit, hit_point.normal(), -ray.d, light_hit.direction));
                 }
-                return(color);
 
             }
+            return(color);
         }
         return(RGBColor::rep(0.0f));
     }
