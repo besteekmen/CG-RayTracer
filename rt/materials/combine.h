@@ -11,7 +11,6 @@ public:
     CombineMaterial();
     std::vector<Material*> materials;
     std::vector<float> weights;
-    int sample_index = -1;
     void add(Material* material, float weight);
     virtual RGBColor getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const;
     virtual RGBColor getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
