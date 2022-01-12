@@ -21,6 +21,7 @@
 #include <rt/materials/phong.h>
 #include <rt/materials/mirror.h>
 #include <rt/materials/combine.h>
+#include <rt/materials/cooktorrance.h>
 
 #include <rt/integrators/recraytrace.h>
 
@@ -58,9 +59,7 @@ void a7prepMaterials1(Material** materials) {
     materials[0] = new LambertianMaterial(blacktex, whitetex);
     materials[1] = new LambertianMaterial(blacktex, redtex);
     materials[2] = new LambertianMaterial(blacktex, greentex);
-
     materials[3] = new LambertianMaterial(blacktex, whitetex);
-
     materials[4] = new LambertianMaterial(blacktex, whitetex);
 }
 
@@ -68,7 +67,6 @@ void a7prepMaterials2(Material** materials) {
     materials[0] = new LambertianMaterial(blacktex, whitetex);
     materials[1] = new LambertianMaterial(blacktex, redtex);
     materials[2] = new LambertianMaterial(blacktex, greentex);
-
     materials[3] = new PhongMaterial(whitetex, 10.0f);
     materials[4] = new MirrorMaterial(0.0f, 0.0f);
 }
@@ -94,6 +92,19 @@ void a7prepMaterials3(Material** materials) {
     materials[4] = combined;
 }
 
+void a7prepMaterials4(Material** materials) {
+    materials[0] = new LambertianMaterial(blacktex, whitetex);
+    materials[1] = new LambertianMaterial(blacktex, redtex);
+    materials[2] = new LambertianMaterial(blacktex, greentex);
+    materials[3] = new CookTorranceMaterial(whitetex, 0.8f, 0.3f, 0.06f);
+
+    MirrorMaterial* mirror = new MirrorMaterial(0.0f, 0.0f);
+    CombineMaterial* combined = new CombineMaterial();
+    combined->add(materials[3],0.5f);
+    combined->add(mirror,0.5f);
+    materials[4] = combined;
+}
+
 void a7renderCornellbox(float scale, const char* filename, Material** materials) {
     Image img(400, 400);
     World world;
@@ -106,7 +117,7 @@ void a7renderCornellbox(float scale, const char* filename, Material** materials)
     Material* grey = materials[0];
     Material* leftWallMaterial = materials[1];
     Material* rightWallMaterial = materials[2];
-    
+
     Material* sphereMaterial = materials[3];
     Material* floorMaterial = materials[4];
 
@@ -146,5 +157,7 @@ void a_materials() {
     a7renderCornellbox(0.001f, "a6-1b.png", materials);
     a7prepMaterials3(materials);
     a7renderCornellbox(0.001f, "a6-1c.png", materials);
+    a7prepMaterials4(materials);
+    a7renderCornellbox(0.001f, "a6-1d.png", materials);
     delete [] materials;
 }
