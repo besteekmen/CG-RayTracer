@@ -1,29 +1,44 @@
 #include <rt/coordmappers/spherical.h>
 #include <rt/intersection.h>
 
+
 namespace rt {
 
 SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& zenith, const Vector& azimuthRef)
 {
-    this->origin = origin;
-    this->zenith = zenith;
-    this->scaleZenith = zenith.length();
-    this->azimuthRef = azimuthRef - dot(azimuthRef, this->zenith.normalize())*zenith;
-    this->scaleAzimuthRef = this->azimuthRef.length();
-    this->perpDirection = cross(this->zenith, this->azimuthRef).normalize();
+    this->o = origin;
+
+    // zenith — the direction towards the north pole of the sphere.
+    // The magnitude defines the scaling along the y texture direction.
+    this->zen = zenith;
+
+    // a direction defining the prime meridian
+    // The magnitude defines the scaling along the x texture direction
+    this->azimuth = azimuthRef;
+
 }
 
 Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
-    Vector point = hit.local() - origin;
-    float v = acos(dot(zenith.normalize(), point.normalize()))/(pi*scaleZenith);
-    Vector azimuthPlaneHit = point - zenith * dot(zenith, point) / (scaleZenith * scaleZenith);
-    float u1, u2;
-    u2 = dot(azimuthPlaneHit, perpDirection);
-    u1 = acos(dot(azimuthRef.normalize(), azimuthPlaneHit.normalize()));
-    if (u2 < 0) {
-        return(Point(u1 / (2 * pi * scaleAzimuthRef), v, 0));
-    }
-    return(Point((1 / scaleAzimuthRef) - (u1 / (2 * pi * scaleAzimuthRef)), v, 0));
+
+    // Similar to Cylinder
+    Vector p = hit.local() - o;
+    Vector zen_n = zen.normalize();
+    Vector azimuth_n = azimuth.normalize();
+
+    Vector z = cross(zen_n, azimuth_n).normalize() * azimuth.length();
+
+    float theta = acosf(dot(p.normalize(), zen_n));
+
+    float u = dot(p, azimuth) / azimuth.lensqr();
+    float v = dot(p, z) / z.lensqr();
+
+    float phi = acosf(dot(Vector(u, 0.0f, v).normalize(), azimuth_n));
+
+    return Point(
+        phi / (2 * pi * azimuth.length()),
+        theta / (pi * azimuth.length()),
+        0.0f
+    );
 }
 
 }
