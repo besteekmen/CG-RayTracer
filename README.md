@@ -16,8 +16,8 @@ This release includes the implementations for CG class requested in the Assignme
 
 #### Features:
 We have implemented all mandatory features and all BONUS features requested in this assignment.
-Mandatory Features: All
-BONUS features: All: Combined Material (6.7), Cook-Torrance Material (6.8), Environment Map (6.12), Depth of Field (6.16), Motion Blur (6.17), Smooth Edges (6.18) 
+
+*BONUS features:* Combined Material (6.7), Cook-Torrance Material (6.8), Environment Map (6.12), Depth of Field (6.16), Motion Blur (6.17), Smooth Edges (6.18) 
 
 ***Example Images:*** The main functions are edited in order to render all requested images as well as our specific images for additional features. The rendered images are located in the same directory with this README file on this release. The results of BONUS features can be observed from the images:
 - Combined Material: *a6-1c.png*
