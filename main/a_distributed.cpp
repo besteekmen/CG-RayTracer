@@ -48,9 +48,9 @@ void renderCornellbox(float scale, const char* filename, Camera* cam, Material* 
     Material* yellowmat = new LambertianMaterial(blacktex, yellowtex);
     Material* leftWallMaterial = new LambertianMaterial(blacktex, redtex);
     Material* rightWallMaterial = new LambertianMaterial(blacktex, greentex);
-    
-    
-    
+
+
+
 
     //walls
     scene->add(new Quad(Point(000.f, 000.f, 000.f)*scale, Vector(000.f, 000.f, 560.f)*scale, Vector(550.f, 000.f, 000.f)*scale, nullptr, floorMaterial)); //floor
@@ -103,6 +103,6 @@ void a_distributed() {
 
     renderCornellbox(0.001f, "a6-5.png", cam, sphereMaterial1, floorMaterial1, 30);
     renderCornellbox(0.001f, "a6-6.png", cam, sphereMaterial2, floorMaterial2, 30);
-    //renderCornellbox(0.001f, "a6-7a.png", dofcam, sphereMaterial2, floorMaterial2, 30);
-    //renderCornellbox(0.001f, "a6-7b.png", dofcam, sphereMaterial2, floorMaterial2, 1000);
+    renderCornellbox(0.001f, "a6-7a.png", dofcam, sphereMaterial2, floorMaterial2, 30);
+    renderCornellbox(0.001f, "a6-7b.png", dofcam, sphereMaterial2, floorMaterial2, 1000);
 }
