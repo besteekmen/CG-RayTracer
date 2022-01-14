@@ -21,6 +21,20 @@ public:
     );
 
     virtual Ray getPrimaryRay(float x, float y) const;
+    
+private:
+    Point center;
+    Vector forward;
+    Vector up;
+    float verticalOpeningAngle;
+    float horizontalOpeningAngle;
+    float scaleX;
+    float scaleY;
+
+    Vector CamXAxis;
+    Vector CamYAxis;
+    Vector CamZAxis;
+    float fd, ar;
 };
 
 }
