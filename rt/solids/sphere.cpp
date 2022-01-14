@@ -4,18 +4,10 @@
 
 namespace rt {
 
-Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material)
+Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
 	this->center = center;
 	this->radius = radius;
-	this->texMapper = texMapper;
-	this->material = material;
-    if (texMapper == nullptr) {
-        this->texMapper = new WorldMapper(Vector::rep(1.0f));
-    }
-    else {
-        this->texMapper = texMapper;
-    }
 }
 
 BBox Sphere::getBounds() const {
