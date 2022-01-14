@@ -19,7 +19,7 @@ We have implemented all mandatory features and all BONUS features requested in t
 
 *BONUS features:* Combined Material (6.7), Cook-Torrance Material (6.8), Environment Map (6.12), Depth of Field (6.16), Motion Blur (6.17), Smooth Edges (6.18) 
 
-***Example Images:*** The main functions are edited in order to render all requested images as well as our specific images for additional features. The rendered images are located in the same directory with this README file on this release. The results of BONUS features can be observed from the images:
+***Example Images:*** The main functions are edited in order to render all requested images as well as our specific images for additional features. The rendered images are located in the root directory on this release. The results of BONUS features can be observed from the images:
 - Combined Material: *a6-1c.png*
 - Cook-Torrance Material: *a6-1d.png*
 - Environment Map: *a6-4f.png*
