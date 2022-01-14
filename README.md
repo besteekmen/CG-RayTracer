@@ -1,6 +1,6 @@
-### Introduction to Computer Graphics - Assignment 5 Release
+### Introduction to Computer Graphics - Assignment 6 Release
 
-This release includes the implementations for CG class requested in the Assignment 5.
+This release includes the implementations for CG class requested in the Assignment 6.
 
 #### Students:
 
@@ -15,18 +15,24 @@ This release includes the implementations for CG class requested in the Assignme
 * IDE: VStudio 2021
 
 #### Features:
-We have implemented all mandatory features and BONUS features requested in this assignment.
+We have implemented all mandatory features and all BONUS features requested in this assignment.
 Mandatory Features: All
-BONUS features: Projective Light Source
+BONUS features: All: Combined Material (6.7), Cook-Torrance Material (6.8), Environment Map (6.12), Depth of Field (6.16), Motion Blur (6.17), Smooth Edges (6.18) 
 
-***Note:*** We have edited the renderCornellboxA in a_lighting.cpp by replacing three point lights to projective lights to generate the projective light pictures. The originalfile is preserved with additional header for the projective light source. To generate the same image, basically point light sources may be replaced.
+***Example Images:*** The main functions are edited in order to render all requested images as well as our specific images for additional features. The rendered images are located in the same directory with this README file on this release. The results of BONUS features can be observed from the images:
+- Combined Material: *a6-1c.png*
+- Cook-Torrance Material: *a6-1d.png*
+- Environment Map: *a6-4f.png*
+- Depth of Field: *a6-7a.png, a6-7b.png*
+- Motion Blur: *a6-1e.png* (with 100 samples)
+- Smooth Edges: *a6-8b.png*
 
 #### Theoretical:
 We have submitted the theoretical part on MS Teams.
 
 #### Tests:
 
-We have tested our code both on a Windows (development platform) and a Linux system and we have generated the result images in both with no problem.
+We have tested our code both on a Windows (development platform) and a Linux system and we have generated the result images in both with no problem. The total runtime was around 40 mins with 1000 sample picture taking 21 to 28 minutes depending on machine.
 
 * Test platform 1: Windows 11, C++ 17.
 * Test platform 2: Ubuntu 16.04 LTS, C++ 17
