@@ -1,16 +1,19 @@
 #include <rt/solids/triangle.h>
+#include <rt/coordmappers/world.h>
+#include <core/random.h>
+#include <core/float4.h>
 
 namespace rt {
 
-Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material)
+Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
   this->v1 = vertices[0];
   this->v2 = vertices[1];
   this->v3 = vertices[2];
-  this->material = material;
+  this->normal = cross((v2 - v1), (v3 - v1)).normalize();
 }
 
-Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)
+Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
   this->v1 = v1;
   this->v2 = v2;
@@ -53,11 +56,18 @@ Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) con
     return Intersection::failure();
 
   t = dot(e2, qvec) * invDet;
-  return Intersection(t, ray, this, normal, ray.getPoint(t));
+  return Intersection(t, ray, this, normal, Point(1-u-v, u, v));
 }
 
 Solid::Sample Triangle::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    float u = random(), v = random(), w = random();
+    u = u / (u + v + w);
+    v = v / (u + v + w);
+    w = 1 - u - v;
+    Solid::Sample s{};
+    s.point = Point(u * Float4(v1) + v * Float4(v2) + w * Float4(v3));
+    s.normal = normal;
+    return(s);
 }
 
 float Triangle::getArea() const {

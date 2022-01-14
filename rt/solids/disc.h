@@ -2,11 +2,13 @@
 #define CG1RAYTRACER_SOLIDS_DISC_HEADER
 
 #include <rt/solids/solid.h>
+#include <core/matrix.h>
 
 namespace rt {
 
 class Disc : public Solid {
 public:
+    Matrix m;
     Disc() {}
     Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material);
 

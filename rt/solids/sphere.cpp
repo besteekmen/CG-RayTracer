@@ -1,13 +1,13 @@
 #include <rt/solids/sphere.h>
+#include <rt/coordmappers/world.h>
+#include <core/float4.h>
 
 namespace rt {
 
-Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material)
+Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
 	this->center = center;
 	this->radius = radius;
-	this->texMapper = texMapper;
-	this->material = material;
 }
 
 BBox Sphere::getBounds() const {
@@ -42,7 +42,8 @@ Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const
 		}
 
     normal = ray.getPoint(t) - center;
-    return Intersection(t, ray, this, normal.normalize(), ray.getPoint(t));
+    Point hit = ray.getPoint(t);
+    return(Intersection(t - epsilon, ray, this, normal.normalize(), hit));
 }
 
 Solid::Sample Sphere::sample() const {

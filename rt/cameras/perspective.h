@@ -14,7 +14,9 @@ public:
         const Vector& forward,
         const Vector& up,
         float verticalOpeningAngle,
-        float horizonalOpeningAngle
+        float horizonalOpeningAngle,
+        float time0 = 0.f,
+        float time1 = 0.f
         );
 
     virtual Ray getPrimaryRay(float x, float y) const;
@@ -30,6 +32,8 @@ private:
   Vector CamXAxis;
   Vector CamYAxis;
   Vector CamZAxis;
+  float time0;
+  float time1;
 };
 
 }

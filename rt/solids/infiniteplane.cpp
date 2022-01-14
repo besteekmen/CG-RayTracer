@@ -1,13 +1,12 @@
 #include <rt/solids/infiniteplane.h>
+#include <rt/coordmappers/world.h>
 
 namespace rt {
 
-InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material)
+InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
   this->origin = origin;
   this->normal = normal;
-  this->texMapper = texMapper;
-  this->material = material;
 }
 
 BBox InfinitePlane::getBounds() const {
