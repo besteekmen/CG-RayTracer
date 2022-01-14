@@ -18,7 +18,7 @@ namespace rt {
             Material::Sampling sample = hit_point.solid->material->useSampling();
             if (sample == Material::Sampling::SAMPLING_ALL || sample == Material::Sampling::SAMPLING_SECONDARY) {
                 Material::SampleReflectance sample_reflect = hit_point.solid->material->getSampleReflectance(local_hit, hit_point.normal(), -ray.d);
-                color = color + sample_reflect.reflectance * radiance(Ray(hit_point.hitPoint(), sample_reflect.direction, hit_point.ray.t), count + 1);
+                color = color + sample_reflect.reflectance * radiance(Ray(hit_point.hitPoint() + sample_reflect.direction * offset, sample_reflect.direction, hit_point.ray.t), count + 1);
             }
             if (sample == Material::Sampling::SAMPLING_NOT_NEEDED || sample == Material::Sampling::SAMPLING_SECONDARY) {
 
@@ -27,7 +27,7 @@ namespace rt {
                     if (dot(light_hit.direction, hit_point.normal()) < epsilon) {
                         continue;
                     }
-                    Intersection obstruction_hit = this->world->scene->intersect(Ray(hit_point.hitPoint(), light_hit.direction, hit_point.ray.t));
+                    Intersection obstruction_hit = this->world->scene->intersect(Ray(hit_point.hitPoint() + hit_point.normal() * offset, light_hit.direction, hit_point.ray.t));
                     if (obstruction_hit) {
                         if (obstruction_hit.distance < light_hit.distance) {
                             continue;

@@ -10,7 +10,9 @@ public:
     RecursiveRayTracingIntegrator(World* world) : Integrator(world) {}
     RGBColor radiance(const Ray& ray, int count) const;
     virtual RGBColor getRadiance(const Ray& ray) const;
-    
+private:
+    float offset =  0.0001f;
+
 };
 
 }
