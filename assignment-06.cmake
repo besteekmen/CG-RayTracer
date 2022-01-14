@@ -4,6 +4,8 @@ set(MY_ADDITIONAL_SOURCES
     # Please add your source files here
     rt/materials/cooktorrance.cpp
     rt/materials/cooktorrance.h
+    rt/solids/movingsphere.cpp
+    rt/solids/movingsphere.h
 )
 
 set(ASSIGNMENT_SOURCES
