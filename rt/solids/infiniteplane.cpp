@@ -3,18 +3,10 @@
 
 namespace rt {
 
-InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material)
+InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material) : Solid(texMapper, material)
 {
   this->origin = origin;
   this->normal = normal;
-  this->texMapper = texMapper;
-  this->material = material;
-  if (texMapper == nullptr) {
-	  this->texMapper = new WorldMapper(Vector::rep(1.0f));
-  }
-  else {
-	  this->texMapper = texMapper;
-  }
 }
 
 BBox InfinitePlane::getBounds() const {

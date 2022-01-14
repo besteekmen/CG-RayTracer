@@ -4,17 +4,10 @@
 
 namespace rt {
 
-AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper, Material* material)
+AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper, Material* material): Solid(texMapper, material)
 {
   this->minCorner = min(corner1, corner2);
   this->maxCorner = max(corner1, corner2);
-  this->material = material;
-  if (texMapper == nullptr) {
-      this->texMapper = new WorldMapper(Vector::rep(1.0f));
-  }
-  else {
-      this->texMapper = texMapper;
-  }
 }
 
 BBox AABox::getBounds() const {

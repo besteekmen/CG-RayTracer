@@ -4,18 +4,12 @@
 
 namespace rt {
 
-Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material)
+Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material): Solid(texMapper, material)
 {
 	this->center = center;
 	this->normal = normal;
 	this->radius = radius;
-	this->material = material;
-	if (texMapper == nullptr) {
-		this->texMapper = new WorldMapper(Vector::rep(1.0f));
-	}
-	else {
-		this->texMapper = texMapper;
-	}
+
 
 	Vector s;
 	if (normal.x < normal.y && normal.x < normal.z) {
