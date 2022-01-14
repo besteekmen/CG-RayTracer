@@ -27,7 +27,7 @@ namespace rt {
                     if (dot(light_hit.direction, hit_point.normal()) < epsilon) {
                         continue;
                     }
-                    Intersection obstruction_hit = this->world->scene->intersect(Ray(hit_point.hitPoint() + hit_point.normal() * offset, light_hit.direction, hit_point.ray.t));
+                    Intersection obstruction_hit = this->world->scene->intersect(Ray(hit_point.hitPoint(), light_hit.direction, hit_point.ray.t));
                     if (obstruction_hit) {
                         if (obstruction_hit.distance < light_hit.distance) {
                             continue;
