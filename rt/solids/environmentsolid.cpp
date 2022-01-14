@@ -14,7 +14,7 @@ EnvironmentSolid::EnvironmentSolid(CoordMapper *texMapper, Material *material) {
 }
 
 Intersection EnvironmentSolid::intersect(const rt::Ray &ray, float previousBestDistance) const {
-    return Intersection(FLT_MAX, ray, this, ray.d, Point::rep(0.0f));
+    return Intersection(FLT_MAX/10, ray, this, ray.d, Point::rep(0.0f));
 }
 
 BBox EnvironmentSolid::getBounds() const {
