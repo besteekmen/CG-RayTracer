@@ -6,6 +6,10 @@ set(MY_ADDITIONAL_SOURCES
     rt/materials/cooktorrance.h
     rt/solids/movingsphere.cpp
     rt/solids/movingsphere.h
+    rt/solids/environmentsolid.cpp
+    rt/solids/environmentsolid.h
+    rt/coordmappers/environment.cpp
+    rt/coordmappers/environment.h
 )
 
 set(ASSIGNMENT_SOURCES
