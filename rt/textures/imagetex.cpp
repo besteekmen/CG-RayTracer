@@ -96,11 +96,15 @@ RGBColor ImageTexture::getColor(const Point& coord) {
 }
 
 RGBColor ImageTexture::getColorDX(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    Point p1 = Point(coord.x + 0.5f / img_width, coord.y, coord.z);
+    Point p2 = Point(coord.x - 0.5f / img_width, coord.y, coord.z);
+    return getColor(p1) - getColor(p2);
 }
 
 RGBColor ImageTexture::getColorDY(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    Point p1 = Point(coord.x, coord.y + 0.5f / img_height, coord.z); //may improve depth by multiplying the y coord here
+    Point p2 = Point(coord.x, coord.y - 0.5f / img_height, coord.z);
+    return getColor(p1) - getColor(p2);
 }
 
 }
