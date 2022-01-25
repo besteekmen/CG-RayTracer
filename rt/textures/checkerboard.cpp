@@ -22,11 +22,11 @@ RGBColor CheckerboardTexture::getColor(const Point& coord) {
     return black;
 }
 
-rt::RGBColor PerlinTexture::getColorDX(const Point& coord) {
+rt::RGBColor CheckerboardTexture::getColorDX(const Point& coord) {
     return RGBColor::rep(0.0f);
 }
 
-rt::RGBColor PerlinTexture::getColorDY(const Point& coord) {
+rt::RGBColor CheckerboardTexture::getColorDY(const Point& coord) {
     return RGBColor::rep(0.0f);
 }
 
