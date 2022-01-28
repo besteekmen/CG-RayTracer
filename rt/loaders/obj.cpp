@@ -101,6 +101,7 @@ struct FileLine {
     Instruction fetchInstruction();
     float fetchFloat();
     float fetchFloat(float defaultv);
+    std::string fetchString();
     Int3 fetchVertex();
 };
 
@@ -213,6 +214,13 @@ float FileLine::fetchFloat(float defaultv) {
     return f;
 }
 
+std::string FileLine::fetchString() {
+    skipWhitespace();
+    size_t start = pos;
+    while (str.c_str()[pos]!=' ' && str.c_str()[pos]!='\t' && str.c_str()[pos]!='\n')   ++pos;
+    return str.substr(start, pos-start);
+}
+
 Int3 FileLine::fetchVertex() {
     skipWhitespace();
     const char* src=str.c_str()+pos;
@@ -320,6 +328,11 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
                 READ_VERTEX(2, true)
 
                 do {
+#ifdef DISABLE_SMOOTH_TRIANGLE
+                    bool skipnormal = true;
+#else
+                    bool skipnormal = v[0].nidx == 0 || v[1].nidx == 0 || v[2].nidx == 0;
+#endif
                     CoordMapper* mapper = nullptr;
 #ifndef DISABLE_COORDMAPPERS
                     bool skiptex = v[0].tidx == 0 || v[1].tidx == 0 || v[2].tidx == 0;
@@ -339,11 +352,6 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
 #endif
 
                     Solid* t;
-#ifdef DISABLE_SMOOTH_TRIANGLE
-                    bool skipnormal = true;
-#else
-                    bool skipnormal = v[0].nidx == 0 || v[1].nidx == 0 || v[2].nidx == 0;
-#endif
                     if (skipnormal) {
                         t = new Triangle(Point(vertices[v[0].vidx]), Point(vertices[v[1].vidx]), Point(vertices[v[2].vidx]), mapper, material);
                     } else {

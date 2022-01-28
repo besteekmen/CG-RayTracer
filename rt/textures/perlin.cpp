@@ -44,11 +44,11 @@ rt::RGBColor PerlinTexture::getColor(const Point& coord) {
 }
 
 rt::RGBColor PerlinTexture::getColorDX(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor::rep(0.0f);
 }
 
 rt::RGBColor PerlinTexture::getColorDY(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor::rep(0.0f);
 }
 
 void PerlinTexture::addOctave(float amplitude, float frequency) {
